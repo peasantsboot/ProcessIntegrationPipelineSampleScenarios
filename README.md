@@ -22,3 +22,21 @@ The following sample scenarios are covered:
 - Scenario 5: Point-to-Point (Bypass option)
 - Scenario 6: Point-to-Point with IDoc inbound
 
+## Prerequisites
+
+Before you start, run through the following steps to get prepared:
+
+- Copy and deploy the standard package
+- Download the provided files from [here](./download)
+- Setup the little helper flows
+- Setup Postman client
+- Setup credential alias on your tenant
+
+## Setup of Sample Scenarios
+
+For each sample scenario run through the following steps:
+
+- Import and deploy the provided integration packages
+- Setup the Partner Directory entries
+- Finally, test the scenarios
+
