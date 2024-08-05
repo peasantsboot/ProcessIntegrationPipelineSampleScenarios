@@ -15,19 +15,18 @@ In this repository, we explain how to setup a couple of sample scenarios using t
 
 Before you start, run through the following steps to get prepared:
 
-- [Copy and deploy the standard package](prerequisites/standard)
 - Download the provided files from [here](./download)
 - [Setup Postman client](prerequisites/postman)
-- [Setup credential alias on your tenant](prerequisites/credential)
+- [Copy and deploy the standard package](prerequisites/standard)
+- [Create credential alias on your tenant](prerequisites/credential)
 - [Setup the little helper flows](prerequisites/helper)
 
 ## Setup of Sample Scenarios
 
 For each sample scenario run through the following steps:
 
-- Import and deploy the provided integration packages
-- Setup the Partner Directory entries
-- Finally, test the scenarios
+- [Import and deploy the provided integration packages](scenarioSetup/import)
+- [Setup the Partner Directory entries](scenarioSetup/partnerDirectory)
 
 ## Sample Scenarios
 
