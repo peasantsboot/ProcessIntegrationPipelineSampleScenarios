@@ -4341,8 +4341,7 @@
 							"pm.collectionVariables.set(\"namespace\", \"http://demo.sap.com/eip/recipient-list\");",
 							"pm.collectionVariables.set(\"receiver_1\", \"Receiver_21\");",
 							"pm.collectionVariables.set(\"receiver_2\", \"Receiver_22\");",
-							"pm.collectionVariables.set(\"pid\", \"PIP_Samples_\"+pm.collectionVariables.get(\"scenario\"));",
-							"pm.collectionVariables.set(\"pidOld\", pm.collectionVariables.get(\"sender\")+\"~\"+pm.collectionVariables.get(\"interface\"));"
+							"pm.collectionVariables.set(\"pid\", \"PIP_Samples_\"+pm.collectionVariables.get(\"scenario\"));"
 						]
 					}
 				},
@@ -8793,8 +8792,7 @@
 							"pm.collectionVariables.set(\"sender_2\", \"Sender_52\");",
 							"pm.collectionVariables.set(\"interface\", \"SalesOrder.Create\");",
 							"pm.collectionVariables.set(\"receiver\", \"Receiver_51\");",
-							"pm.collectionVariables.set(\"pid\", \"PIP_Samples_\"+pm.collectionVariables.get(\"scenario\"));",
-							"pm.collectionVariables.set(\"pidOld\", pm.collectionVariables.get(\"sender\")+\"~\"+pm.collectionVariables.get(\"interface\"));"
+							"pm.collectionVariables.set(\"pid\", \"PIP_Samples_\"+pm.collectionVariables.get(\"scenario\"));"
 						]
 					}
 				},
@@ -9839,8 +9837,7 @@
 							"pm.collectionVariables.set(\"sender\", \"S4HCLNT601\");",
 							"pm.collectionVariables.set(\"interface\", \"FLIGHTBOOKING_CREATEFROMDAT.FLIGHTBOOKING_CREATEFROMDAT01\");",
 							"pm.collectionVariables.set(\"receiver\", \"Receiver_61\");",
-							"pm.collectionVariables.set(\"pid\", \"PIP_Samples_\"+pm.collectionVariables.get(\"scenario\"));",
-							"pm.collectionVariables.set(\"pidOld\", pm.collectionVariables.get(\"sender\")+\"~\"+pm.collectionVariables.get(\"interface\"));"
+							"pm.collectionVariables.set(\"pid\", \"PIP_Samples_\"+pm.collectionVariables.get(\"scenario\"));"
 						]
 					}
 				},
