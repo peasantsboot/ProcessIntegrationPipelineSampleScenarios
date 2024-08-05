@@ -32,9 +32,9 @@ For each sample scenario run through the following steps:
 
 The following sample scenarios are covered:
 
-- Scenario 1: Recipient List & Interface Split
-- Scenario 2: Interface Split with Multi Mapping & XI inbound
-- Scenario 3: Interface Split with Maintain Order at Runtime
-- Scenario 4: Use Extended Receiver Determination mapping instead of XSLT
-- Scenario 5: Point-to-Point (Bypass option)
-- Scenario 6: Point-to-Point with IDoc inbound
+- [Scenario 1: Recipient List & Interface Split](scenarios/scenario1)
+- [Scenario 2: Interface Split with Multi Mapping & XI inbound](scenarios/scenario2)
+- [Scenario 3: Interface Split with Maintain Order at Runtime](scenarios/scenario3)
+- [Scenario 4: Use Extended Receiver Determination mapping instead of XSLT](scenarios/scenario4)
+- [Scenario 5: Point-to-Point (Bypass option)](scenarios/scenario5)
+- [Scenario 6: Point-to-Point with IDoc inbound](scenarios/scenario6)
