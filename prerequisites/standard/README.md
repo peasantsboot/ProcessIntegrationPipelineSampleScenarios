@@ -6,7 +6,7 @@ Copy the latest version of the following package from the SAP Business Accelerat
 
 **Note**: if the package already exists in your workspace, eventually update your package. The sample scenarios require at least version 1.0.6 of the package.
 From version 1.0.6 on we had to do an incompatible change of the partner ID for fetching the interface determination XSLT which was necessary due to the partner ID length restrictions of 60 characters.
-Furthermore, we introduced the option of using alternative partner which maps sender component and sender interface to a scenario name. We would recommend to apply the alternative partner and hence have used this feature for all of our sample scenarios.
+Furthermore, we introduced the option of using alternative partner which maps sender component and sender interface to a scenario name. We recommend to apply the alternative partner and hence have used this feature for all of our sample scenarios.
 
 Configure (optionally) and deploy the following generic artifacts of the standard package:
 
