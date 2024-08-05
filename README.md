@@ -17,9 +17,9 @@ Before you start, run through the following steps to get prepared:
 
 - [Copy and deploy the standard package](prerequisites/standard)
 - Download the provided files from [here](./download)
-- [Setup the little helper flows](prerequisites/helper)
 - [Setup Postman client](prerequisites/postman)
 - [Setup credential alias on your tenant](prerequisites/credential)
+- [Setup the little helper flows](prerequisites/helper)
 
 ## Setup of Sample Scenarios
 
