@@ -8,10 +8,11 @@ With scenario 2, you can test the following features:
 We assume that you have gone through the prerequisites and the scenario setup.
 
 ## Test the scenario
-To test the scenario, navigate to the folder **Scenario 2 - IF Split with Multi Mapping --> Trigger sample messages** of the provided Postman collection **Pipeline Concept - Sample Scenarios**.
+To test the scenario, open your Postman client and navigate to the folder **Scenario 2 - IF Split with Multi Mapping --> Trigger sample messages** of the provided Postman collection **Pipeline Concept - Sample Scenarios**.
 
-You can run any of the POST requests below the **Trigger sample messages** folder.
-In the message monitor of your Cloud Integration tenant, you can monitor the messages which were exchanged:
+In the message monitor of your SAP Integration Suite tenant, you can monitor the messages which were exchanged.
+
+You can run any of the POST requests below the **Trigger sample messages** folder:
 - The first request should run successfully from sender **Sender_21** to **Receiver_21** whereas the message is split into three messages of interface **PurchaseOrderItem.Create** each containing an item.
 - The second request should run successfully from sender **Sender_22** to **Receiver_22** whereas the message is split into four messages, three messages of interface **PurchaseOrderItem.Create** and one of interface **PurchaseOrderHeader.Create**.
 - The third request should run successfully from sender **Sender_23** to **Receiver_22** whereas the message is not split.
