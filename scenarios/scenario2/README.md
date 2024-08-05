@@ -14,5 +14,6 @@ You can run any of the POST requests below the **Trigger sample messages** folde
 In the message monitor of your Cloud Integration tenant, you can monitor the messages which were exchanged:
 - The first request should run successfully from sender **Sender_21** to **Receiver_21** whereas the message is split into three messages of interface **PurchaseOrderItem.Create** each containing an item.
 - The second request should run successfully from sender **Sender_22** to **Receiver_22** whereas the message is split into four messages, three messages of interface **PurchaseOrderItem.Create** and one of interface **PurchaseOrderHeader.Create**.
+- The third request should run successfully from sender **Sender_23** to **Receiver_22** whereas the message is not split.
 
 Go back to [Main page](../../README.md)
