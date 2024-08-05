@@ -1,6 +1,9 @@
 # Scenario 1
 
-Scenario 1 covers the most generic use case, i.e., it combines the Recipient List pattern and the interface split. Furthermore, inbound conversion is needed to convert from JSON to XML.
+Scenario 1 covers the most generic use case:
+- It combines the Recipient List pattern and the interface split.
+- Inbound conversion is needed to convert from JSON to XML.
+- For receiver **Receiver_11**, a receiver specific outbound queue is used.
 
 We assume that you have gone through the prerequisites and the scenario setup.
 
