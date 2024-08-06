@@ -1,4 +1,4 @@
-## Setup little helper flows
+# Setup little helper flows
 
 Once you have downloaded the package **PIP Samples - Little Helpers**, navigate to **Design --> Integrations and APIs** and import the same into your Cloud Integration workspace. The package contains integration flows to help you setting up and testing the scenarios.
 
