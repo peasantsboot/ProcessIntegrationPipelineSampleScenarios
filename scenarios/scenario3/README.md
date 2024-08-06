@@ -10,4 +10,6 @@ In the message monitor of your SAP Integration Suite tenant, you can monitor the
 If you run the request, in the message monitor you should see two messages sent to the mocked receiver with receiver **Receiver_31**,
 one for the item (interface **PurchaseOrderItem**) and one for a trigger file (interface **PurchaseOrderTrigger**). Latter should always be processed after the first message.
 
+<br>![](/images/09_01_Scenario3_MPL.png)
+
 Go back to [Main page](../../README.md)
