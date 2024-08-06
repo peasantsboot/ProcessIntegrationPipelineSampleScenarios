@@ -1,6 +1,8 @@
 ## Setup little helper flows
 
-Once you have downloaded the package **PIP Samples - Little Helpers**, import the same into your Cloud Integration workspace. The package contains integration flows to help you setting up and testing the scenarios.
+Once you have downloaded the package **PIP Samples - Little Helpers**, navigate to **Design --> Integrations and APIs** and import the same into your Cloud Integration workspace. The package contains integration flows to help you setting up and testing the scenarios.
+
+<br>![](/images/04_01_ImportLittleHelpers.png)
 
 When opening the package, you will find the following integration flows:
 
@@ -13,5 +15,7 @@ When opening the package, you will find the following integration flows:
 As a prerequisite for deploying the **PIP_Mocked_XI_Sender** flow, you should have created the credential alias pointing to your own tenant runtime. Configure the Credential Name. The default value is **OWN**.
 
 Then deploy all mandatory integration flows. If you like to test the custom error handling, deploy this integration flow as well.
+
+<br>![](/images/04_02_DeployLittleHelpers.png)
 
 Go back to [Main page](../../README.md)
