@@ -19,4 +19,6 @@ You can run any of the POST requests below the **Trigger sample messages** folde
 
 In any case, because receiver determination as well as interface determination were bypassed you should not see any log for **Pipeline Generic Step04 - Receiver Determination** nor for **Pipeline Generic Step05 - Interface Determination**.
 
+<br>![](/images/11_01_Scenario5_MPL.png)
+
 Go back to [Main page](../../README.md)
