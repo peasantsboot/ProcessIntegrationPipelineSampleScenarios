@@ -14,6 +14,8 @@ You can run any of the POST requests below the **Trigger sample messages** folde
 In any case, the IDoc numbers are displayed in the header Application Message ID.
 Furthermore, for the generic IDoc inbound processing flow **Pipeline Generic Step01 - Inbound Processing for Idoc**, all IDoc numbers are added as custom header.
 
+<br>![](/images/12_01_Scenario6_MPL.png)
+
 **Note**: The generic IDoc inbound processing flow discards duplicate messages based on a combination of the sender component and the IDoc number.
 In this case, the generic IDoc inbound processing flow stops message processing and ends with the custom status **DuplicateDiscarded**.
 It might happen that the mocked IDoc sender creates duplicates if you rerun the scenario at a later point of time.
