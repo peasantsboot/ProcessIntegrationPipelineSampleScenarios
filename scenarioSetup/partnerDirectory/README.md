@@ -17,9 +17,18 @@ For each scenario, the Postman collection contains the following sub folders:
 If you switch to the **Pre-request Script** tab of each scenario folder, you can see the variables that define the Partner Directory entries.
 You may change the **scenario** name and the partner ID **pid** if you prefer different names, however better keep the rest of the values unchanged to avoid breaking the scenario.
 
+<br>![](/images/06_01_PreRequestPD.png)
+
 ## Initial setup of the Partner Directory entries
 
-For each scenario that you like to setup and test, open the respective folder **Setup Partner Directory entries**, and then **Run** all POST APIs in the given order.
+For each scenario that you like to setup and test, open the respective folder **Setup Partner Directory entries**, and then select **Run**.
+
+<br>![](/images/06_02_SetupPD.png)
+
+In the **Runner** tab, run the GET request to fetch the token and all POST requests in the given order.
+
+<br>![](/images/06_03_Runner.png)
+
 This will create the following entries:
 - Alternative partners which map sender component and sender interface to the partner ID.
 - String parameters to determine the runtime behavior and flow end points.
@@ -38,8 +47,12 @@ If you like to double check if the Partner Directory entries have been successfu
 
 For the alternative partner and string parameters, we directly call the Partner Directory API.
 
+<br>![](/images/06_05_ReadString.png)
+
 For the XSLTs, we pass the request to the helper integration flow **PIP_ReadAndDecode_XSLT** which decodes the XSLT after having fetched it from the Partner Directory.
 This way, you are able to see the xpath conditions of the XSLT mappings in the response of the request.
+
+<br>![](/images/06_06_ReadXSLT.png)
 
 ## Optionally: Updating the Partner Directory entries
 
