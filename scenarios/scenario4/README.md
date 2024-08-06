@@ -21,4 +21,6 @@ You can run any of the POST requests below the **Trigger sample messages** folde
 
 In any cases, you should see a message processing log for the integration flow **PIPSamplesScenario4_Step04_XRD** were the message mapping to determine the receivers is carried out.
 
+<br>![](/images/10_01_Scenario4_MPL.png)
+
 Go back to [Main page](../../README.md)
