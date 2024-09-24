@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "a249343e-42d9-41b6-9076-c5106561fa4f",
+		"_postman_id": "e4e2d85f-201c-4228-b362-1fc0c3ddf798",
 		"name": "Pipeline Concept - Sample Scenarios",
 		"description": "This collection helps you to setup and run sample scenarios for the Process Integration Pipeline Concept for Cloud Integration.\n\nWe distingush the following scenarios:\n\n- Scenario 1: Recipient List & Interface Split\n    \n- Scenario 2: Interface Split with Multi Mapping & XI inbound\n    \n- Scenario 3: Interface Split with Maintain Order at Runtime\n    \n- Scenario 4: Use Extended Receiver Determination mapping instead of XSLT\n    \n- Scenario 5: Point-to-Point (Bypass option)\n    \n- Scenario 6: Point-to-Point with IDoc inbound",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
@@ -109,59 +109,6 @@
 								"body": {
 									"mode": "raw",
 									"raw": "{\r\n  \"Agency\": \"{{sender}}\",\r\n  \"Scheme\": \"SenderInterface\",\r\n  \"Id\": \"{{interface}}\",\r\n  \"Pid\": \"{{pid}}\"\r\n}"
-								},
-								"url": {
-									"raw": "https://{{apihost}}/api/v1/AlternativePartners",
-									"protocol": "https",
-									"host": [
-										"{{apihost}}"
-									],
-									"path": [
-										"api",
-										"v1",
-										"AlternativePartners"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Map Alternative Partner to Partner ID Copy",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"pm.test(\"Status code is 201\", function () {\r",
-											"    pm.response.to.have.status(201);\r",
-											"});"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "{{apiAccessToken}}",
-											"type": "string"
-										}
-									]
-								},
-								"method": "POST",
-								"header": [
-									{
-										"key": "Content-Type",
-										"type": "text",
-										"value": "application/json"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n  \"Agency\": \"{{sender}}\",\r\n  \"Scheme\": \"SenderInterface\",\r\n  \"Id\": \"{{interface}}\",\r\n  \"Pid\": \"Test\"\r\n}"
 								},
 								"url": {
 									"raw": "https://{{apihost}}/api/v1/AlternativePartners",
