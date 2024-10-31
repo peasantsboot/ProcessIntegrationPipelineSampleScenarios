@@ -1275,7 +1275,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n\t\"Pid\": \"{{pid}}\",\r\n\t\"Id\": \"MaxJMSRetries\",\r\n\t\"Value\": \"2\"\r\n}",
+									"raw": "{\r\n\t\"Pid\": \"{{pid}}\",\r\n\t\"Id\": \"MaxJMSRetries\",\r\n\t\"Value\": \"1\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -2292,7 +2292,7 @@
 									}
 								},
 								"url": {
-									"raw": "https://{{host}}/http/PIP/Step01/Samples/{{scenario}}?country=DE",
+									"raw": "https://{{host}}/http/PIP/Step01/Samples/{{scenario}}?country=DE&simulateError=true",
 									"protocol": "https",
 									"host": [
 										"{{host}}"
@@ -2308,6 +2308,10 @@
 										{
 											"key": "country",
 											"value": "DE"
+										},
+										{
+											"key": "simulateError",
+											"value": "true"
 										}
 									]
 								}
@@ -2363,7 +2367,7 @@
 									}
 								},
 								"url": {
-									"raw": "https://{{host}}/http/PIP/Step01/Samples/{{scenario}}?country=DE",
+									"raw": "https://{{host}}/http/PIP/Step01/Samples/{{scenario}}?country=DE&simulateError=true",
 									"protocol": "https",
 									"host": [
 										"{{host}}"
@@ -2379,6 +2383,10 @@
 										{
 											"key": "country",
 											"value": "DE"
+										},
+										{
+											"key": "simulateError",
+											"value": "true"
 										}
 									]
 								}
@@ -2423,7 +2431,7 @@
 					]
 				}
 			],
-			"description": "Sample scenario with multiple receivers (Recipient List) and multiple interfaces (Interface Split)\n\n- Receiver determination xpath based on Category and Product Name\n- Interface determination xpath based on Quantity and Currency code\n- Use receiver specific outbound queue for receiver 1\n    \n- Use inbound conversion to map from JSON to XML\n    \n- Use alternative partner to map sender and sender interface to scenario name",
+			"description": "Sample scenario with multiple receivers (Recipient List) and multiple interfaces (Interface Split)\n\n- Receiver determination xpath based on Category and Product Name\n- Interface determination xpath based on Quantity and Currency code\n- Use receiver specific outbound queue for receiver 1\n- Use inbound conversion to map from JSON to XML\n- Use alternative partner to map sender and sender interface to scenario name",
 			"event": [
 				{
 					"listen": "prerequest",
@@ -3088,7 +3096,7 @@
 									}
 								],
 								"url": {
-									"raw": "https://{{apihost}}/api/v1/AlternativePartners?$filter=Pid eq '{{pid}}'",
+									"raw": "https://{{apihost}}/api/v1/AlternativePartners",
 									"protocol": "https",
 									"host": [
 										"{{apihost}}"
@@ -3101,7 +3109,8 @@
 									"query": [
 										{
 											"key": "$filter",
-											"value": "Pid eq '{{pid}}'"
+											"value": "Pid eq '{{pid}}'",
+											"disabled": true
 										}
 									]
 								}
@@ -4371,6 +4380,3300 @@
 							"pm.collectionVariables.set(\"namespace\", \"http://demo.sap.com/eip/recipient-list\");",
 							"pm.collectionVariables.set(\"receiver_1\", \"Receiver_21\");",
 							"pm.collectionVariables.set(\"receiver_2\", \"Receiver_22\");",
+							"pm.collectionVariables.set(\"pid\", \"PIP_Samples_\"+pm.collectionVariables.get(\"scenario\"));"
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Scenario 2A - Bypass Interface Determination",
+			"item": [
+				{
+					"name": "Setup Partner Directory entries",
+					"item": [
+						{
+							"name": "Fetch PD Access Token",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);\r",
+											"postman.setEnvironmentVariable(\"apiAccessToken\", jsonData.access_token);\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "{{apipassword}}",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "{{apiusername}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"type": "text",
+										"value": "*/*"
+									}
+								],
+								"url": {
+									"raw": "https://{{apitokenhost}}/oauth/token?grant_type=client_credentials",
+									"protocol": "https",
+									"host": [
+										"{{apitokenhost}}"
+									],
+									"path": [
+										"oauth",
+										"token"
+									],
+									"query": [
+										{
+											"key": "grant_type",
+											"value": "client_credentials"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Map Alternative Partner to Partner ID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{apiAccessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"Agency\": \"{{sender}}\",\r\n  \"Scheme\": \"SenderInterface\",\r\n  \"Id\": \"{{interface}}\",\r\n  \"Pid\": \"{{pid}}\"\r\n}"
+								},
+								"url": {
+									"raw": "https://{{apihost}}/api/v1/AlternativePartners",
+									"protocol": "https",
+									"host": [
+										"{{apihost}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"AlternativePartners"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create MaxJMSRetries",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{apiAccessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\t\"Pid\": \"{{pid}}\",\r\n\t\"Id\": \"MaxJMSRetries\",\r\n\t\"Value\": \"2\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{apihost}}/api/v1/StringParameters",
+									"protocol": "https",
+									"host": [
+										"{{apihost}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"StringParameters"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create receiverDetermination XSLT",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "{{password}}",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "{{username}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/xml",
+										"type": "text"
+									},
+									{
+										"key": "Pid",
+										"value": "{{pid}}",
+										"type": "text"
+									},
+									{
+										"key": "id",
+										"value": "receiverDetermination",
+										"type": "text"
+									},
+									{
+										"key": "token",
+										"value": "{{apiAccessToken}}",
+										"type": "text"
+									},
+									{
+										"key": "url",
+										"value": "https://{{apihost}}/api/v1/BinaryParameters",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<xsl:stylesheet version=\"3.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\">\r\n    <xsl:template match=\"/\">\r\n        <ns0:Receivers xmlns:ns0=\"http://sap.com/xi/XI/System\">\r\n            <ReceiverNotDetermined>\r\n                <Type>Default</Type>\r\n                <DefaultReceiver>\r\n                    <Service>Receiver_21</Service>\r\n                    <Interfaces>\r\n                        <Interface>\r\n                            <Index>1</Index>\r\n                            <Service>/PIP/Step07/Samples/Scenario_2/Receiver_21/IfIdx1</Service>\r\n                        </Interface>\r\n                    </Interfaces>\r\n                </DefaultReceiver>\r\n            </ReceiverNotDetermined>\r\n            <xsl:if test=\"/*:Order/Supplier = 'ABCD'\">\r\n                <Receiver>\r\n                    <Service>Receiver_21</Service>\r\n                    <Interfaces>\r\n                        <Interface>\r\n                            <Index>1</Index>\r\n                            <Service>/PIP/Step07/Samples/Scenario_2/Receiver_21/IfIdx1</Service>\r\n                        </Interface>\r\n                    </Interfaces>\r\n                </Receiver>\r\n            </xsl:if>\r\n            <xsl:if test=\"/*:Order/Supplier = 'EFGH'\">\r\n                <Receiver>\r\n                    <Service>Receiver_22</Service>\r\n                    <Interfaces/>\r\n                </Receiver>\r\n            </xsl:if>\r\n        </ns0:Receivers>\r\n    </xsl:template>\r\n</xsl:stylesheet>",
+									"options": {
+										"raw": {
+											"language": "xml"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{host}}/http/pip/pd/xslt/upsert",
+									"protocol": "https",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"http",
+										"pip",
+										"pd",
+										"xslt",
+										"upsert"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create interfaceDetermination XSLT for R2",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "{{password}}",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "{{username}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/xml",
+										"type": "text"
+									},
+									{
+										"key": "Pid",
+										"value": "{{pid}}",
+										"type": "text"
+									},
+									{
+										"key": "id",
+										"value": "interfaceDetermination_{{receiver_2}}",
+										"type": "text"
+									},
+									{
+										"key": "token",
+										"value": "{{apiAccessToken}}",
+										"type": "text"
+									},
+									{
+										"key": "url",
+										"value": "https://{{apihost}}/api/v1/BinaryParameters",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<xsl:stylesheet version=\"3.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\">\r\n    <xsl:template match=\"/\">\r\n        <ns0:Interfaces xmlns:ns0=\"http://sap.com/xi/XI/System\">\r\n            <xsl:if test=\"/*:Order/Country = 'DE'\">\r\n                <Interface>\r\n                    <Index>1</Index>\r\n                    <Service>/PIP/Step07/Samples/Scenario_2/Receiver_22/IfIdx1</Service>\r\n                </Interface>\r\n            </xsl:if>\r\n            <xsl:if test=\"/*:Order/Country != 'DE'\">\r\n                <Interface>\r\n                    <Index>2</Index>\r\n                    <Service>/PIP/Step07/Samples/Scenario_2/Receiver_22/IfIdx2</Service>\r\n                </Interface>\r\n            </xsl:if>\r\n        </ns0:Interfaces>\r\n    </xsl:template>\r\n</xsl:stylesheet>",
+									"options": {
+										"raw": {
+											"language": "xml"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{host}}/http/pip/pd/xslt/upsert",
+									"protocol": "https",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"http",
+										"pip",
+										"pd",
+										"xslt",
+										"upsert"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Check Partner Directory entries",
+					"item": [
+						{
+							"name": "Fetch PD Access Token",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);\r",
+											"postman.setEnvironmentVariable(\"apiAccessToken\", jsonData.access_token);\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "{{apipassword}}",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "{{apiusername}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"type": "text",
+										"value": "*/*"
+									}
+								],
+								"url": {
+									"raw": "https://{{apitokenhost}}/oauth/token?grant_type=client_credentials",
+									"protocol": "https",
+									"host": [
+										"{{apitokenhost}}"
+									],
+									"path": [
+										"oauth",
+										"token"
+									],
+									"query": [
+										{
+											"key": "grant_type",
+											"value": "client_credentials"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Read Alternative Partners",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{apiAccessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"type": "text",
+										"value": "application/xml"
+									}
+								],
+								"url": {
+									"raw": "https://{{apihost}}/api/v1/AlternativePartners?$filter=Pid eq '{{pid}}'",
+									"protocol": "https",
+									"host": [
+										"{{apihost}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"AlternativePartners"
+									],
+									"query": [
+										{
+											"key": "$filter",
+											"value": "Pid eq '{{pid}}'"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Read MaxJMSRetries",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{apiAccessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://{{apihost}}/api/v1/StringParameters(Pid='{{pid}}',Id='MaxJMSRetries')",
+									"protocol": "https",
+									"host": [
+										"{{apihost}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"StringParameters(Pid='{{pid}}',Id='MaxJMSRetries')"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Read receiverDetermination XSLT",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "{{password}}",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "{{username}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "token",
+										"value": "{{apiAccessToken}}",
+										"type": "text"
+									},
+									{
+										"key": "Pid",
+										"value": "{{pid}}",
+										"type": "text"
+									},
+									{
+										"key": "id",
+										"value": "receiverDetermination",
+										"type": "text"
+									},
+									{
+										"key": "url",
+										"value": "https://{{apihost}}/api/v1/BinaryParameters",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://{{host}}/http/pip/pd/xslt/read",
+									"protocol": "https",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"http",
+										"pip",
+										"pd",
+										"xslt",
+										"read"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Read interfaceDetermination XSLT for R2",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "{{password}}",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "{{username}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "token",
+										"value": "{{apiAccessToken}}",
+										"type": "text"
+									},
+									{
+										"key": "Pid",
+										"value": "{{pid}}",
+										"type": "text"
+									},
+									{
+										"key": "id",
+										"value": "interfaceDetermination_{{receiver_2}}",
+										"type": "text"
+									},
+									{
+										"key": "url",
+										"value": "https://{{apihost}}/api/v1/BinaryParameters",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://{{host}}/http/pip/pd/xslt/read",
+									"protocol": "https",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"http",
+										"pip",
+										"pd",
+										"xslt",
+										"read"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Update Partner Directory entries",
+					"item": [
+						{
+							"name": "Fetch PD Access Token",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);\r",
+											"postman.setEnvironmentVariable(\"apiAccessToken\", jsonData.access_token);\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "{{apipassword}}",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "{{apiusername}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"type": "text",
+										"value": "*/*"
+									}
+								],
+								"url": {
+									"raw": "https://{{apitokenhost}}/oauth/token?grant_type=client_credentials",
+									"protocol": "https",
+									"host": [
+										"{{apitokenhost}}"
+									],
+									"path": [
+										"oauth",
+										"token"
+									],
+									"query": [
+										{
+											"key": "grant_type",
+											"value": "client_credentials"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update MaxJMSRetries",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{apiAccessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\t\"Pid\": \"{{pid}}\",\r\n\t\"Id\": \"MaxJMSRetries\",\r\n\t\"Value\": \"1\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{apihost}}/api/v1/StringParameters(Pid='{{pid}}',Id='MaxJMSRetries')",
+									"protocol": "https",
+									"host": [
+										"{{apihost}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"StringParameters(Pid='{{pid}}',Id='MaxJMSRetries')"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Clean up Partner Directory",
+					"item": [
+						{
+							"name": "Fetch PD Access Token",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);\r",
+											"postman.setEnvironmentVariable(\"apiAccessToken\", jsonData.access_token);\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "{{apipassword}}",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "{{apiusername}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"type": "text",
+										"value": "*/*"
+									}
+								],
+								"url": {
+									"raw": "https://{{apitokenhost}}/oauth/token?grant_type=client_credentials",
+									"protocol": "https",
+									"host": [
+										"{{apitokenhost}}"
+									],
+									"path": [
+										"oauth",
+										"token"
+									],
+									"query": [
+										{
+											"key": "grant_type",
+											"value": "client_credentials"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Alternative Partner",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 204\", function () {\r",
+											"    pm.response.to.have.status(204);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{apiAccessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "https://{{apihost}}/api/v1/AlternativePartners(Hexagency='53656E6465725F3241',Hexscheme='53656E646572496E74657266616365',Hexid='50757263686173654F726465722E437265617465')",
+									"protocol": "https",
+									"host": [
+										"{{apihost}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"AlternativePartners(Hexagency='53656E6465725F3241',Hexscheme='53656E646572496E74657266616365',Hexid='50757263686173654F726465722E437265617465')"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete MaxJMSRetries",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 204\", function () {\r",
+											"    pm.response.to.have.status(204);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{apiAccessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "https://{{apihost}}/api/v1/StringParameters(Pid='{{pid}}',Id='MaxJMSRetries')",
+									"protocol": "https",
+									"host": [
+										"{{apihost}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"StringParameters(Pid='{{pid}}',Id='MaxJMSRetries')"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete receiverDetermination XSLT",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 204\", function () {\r",
+											"    pm.response.to.have.status(204);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{apiAccessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "https://{{apihost}}/api/v1/BinaryParameters(Pid='{{pid}}',Id='receiverDetermination')",
+									"protocol": "https",
+									"host": [
+										"{{apihost}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"BinaryParameters(Pid='{{pid}}',Id='receiverDetermination')"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete interfaceDetermination XSLT for R2",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 204\", function () {\r",
+											"    pm.response.to.have.status(204);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{apiAccessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "https://{{apihost}}/api/v1/BinaryParameters(Pid='{{pid}}',Id='interfaceDetermination_{{receiver_2}}')",
+									"protocol": "https",
+									"host": [
+										"{{apihost}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"BinaryParameters(Pid='{{pid}}',Id='interfaceDetermination_{{receiver_2}}')"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Trigger sample messages",
+					"item": [
+						{
+							"name": "Send Order ABCD to R1 bypass option",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/xml",
+										"type": "text"
+									},
+									{
+										"key": "sender",
+										"value": "{{sender}}",
+										"type": "text"
+									},
+									{
+										"key": "interface",
+										"value": "{{interface}}",
+										"type": "text"
+									},
+									{
+										"key": "namespace",
+										"value": "{{namespace}}",
+										"type": "text"
+									},
+									{
+										"key": "host",
+										"value": "{{host}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "<?xml version='1.0' encoding='UTF-8'?>\r\n<ns0:Order xmlns:ns0=\"http://demo.sap.com/eip/recipient-list\" PurchaseOrderNumber=\"2A8001\" OrderDate=\"2019-05-06\">\r\n    <Supplier>ABCD</Supplier>\r\n    <Country>DE</Country>\r\n    <Item ItemNumber=\"10\" PurchaseOrderNumber=\"\" OrderDate=\"\">\r\n        <ProductId>HT-1001</ProductId>\r\n        <ProductName>Word</ProductName>\r\n        <Category>Software</Category>\r\n        <Quantity>10</Quantity>\r\n        <CurrencyCode>EUR</CurrencyCode>\r\n        <Price>799.00</Price>\r\n    </Item>\r\n    <Item ItemNumber=\"20\" PurchaseOrderNumber=\"\" OrderDate=\"\">\r\n        <ProductId>HT-1002</ProductId>\r\n        <ProductName>Gaming Keyboard XXL</ProductName>\r\n        <Category>Keyboards</Category>\r\n        <Quantity>4</Quantity>\r\n        <CurrencyCode>EUR</CurrencyCode>\r\n        <Price>100.00</Price>\r\n    </Item>\r\n    <Item ItemNumber=\"30\" PurchaseOrderNumber=\"\" OrderDate=\"\">\r\n            <ProductId>HT-1003</ProductId>\r\n            <ProductName>Lenovo</ProductName>\r\n            <Category>Notebooks</Category>\r\n            <Quantity>2</Quantity>\r\n            <CurrencyCode>EUR</CurrencyCode>\r\n            <Price>899.00</Price>\r\n    </Item>\r\n</ns0:Order>",
+									"options": {
+										"raw": {
+											"language": "xml"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{host}}/http/PIP/Samples/MockedXISender",
+									"protocol": "https",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"http",
+										"PIP",
+										"Samples",
+										"MockedXISender"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Send Order XXXX to Default bypass option",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/xml",
+										"type": "text"
+									},
+									{
+										"key": "sender",
+										"value": "{{sender}}",
+										"type": "text"
+									},
+									{
+										"key": "interface",
+										"value": "{{interface}}",
+										"type": "text"
+									},
+									{
+										"key": "namespace",
+										"value": "{{namespace}}",
+										"type": "text"
+									},
+									{
+										"key": "host",
+										"value": "{{host}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "<?xml version='1.0' encoding='UTF-8'?>\r\n<ns0:Order xmlns:ns0=\"http://demo.sap.com/eip/recipient-list\" PurchaseOrderNumber=\"2A8002\" OrderDate=\"2019-05-06\">\r\n    <Supplier>XXXX</Supplier>\r\n    <Country>DE</Country>\r\n    <Item ItemNumber=\"10\" PurchaseOrderNumber=\"\" OrderDate=\"\">\r\n        <ProductId>HT-1001</ProductId>\r\n        <ProductName>Word</ProductName>\r\n        <Category>Software</Category>\r\n        <Quantity>10</Quantity>\r\n        <CurrencyCode>EUR</CurrencyCode>\r\n        <Price>799.00</Price>\r\n    </Item>\r\n    <Item ItemNumber=\"20\" PurchaseOrderNumber=\"\" OrderDate=\"\">\r\n        <ProductId>HT-1002</ProductId>\r\n        <ProductName>Gaming Keyboard XXL</ProductName>\r\n        <Category>Keyboards</Category>\r\n        <Quantity>4</Quantity>\r\n        <CurrencyCode>EUR</CurrencyCode>\r\n        <Price>100.00</Price>\r\n    </Item>\r\n    <Item ItemNumber=\"30\" PurchaseOrderNumber=\"\" OrderDate=\"\">\r\n            <ProductId>HT-1003</ProductId>\r\n            <ProductName>Lenovo</ProductName>\r\n            <Category>Notebooks</Category>\r\n            <Quantity>2</Quantity>\r\n            <CurrencyCode>EUR</CurrencyCode>\r\n            <Price>899.00</Price>\r\n    </Item>\r\n</ns0:Order>",
+									"options": {
+										"raw": {
+											"language": "xml"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{host}}/http/PIP/Samples/MockedXISender",
+									"protocol": "https",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"http",
+										"PIP",
+										"Samples",
+										"MockedXISender"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Send Order EFGH DE",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/xml",
+										"type": "text"
+									},
+									{
+										"key": "sender",
+										"value": "{{sender}}",
+										"type": "text"
+									},
+									{
+										"key": "interface",
+										"value": "{{interface}}",
+										"type": "text"
+									},
+									{
+										"key": "namespace",
+										"value": "{{namespace}}",
+										"type": "text"
+									},
+									{
+										"key": "host",
+										"value": "{{host}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "<?xml version='1.0' encoding='UTF-8'?>\r\n<ns0:Order xmlns:ns0=\"http://demo.sap.com/eip/recipient-list\" PurchaseOrderNumber=\"2A8003\" OrderDate=\"2019-05-06\">\r\n    <Supplier>EFGH</Supplier>\r\n    <Country>DE</Country>\r\n    <Item ItemNumber=\"10\" PurchaseOrderNumber=\"\" OrderDate=\"\">\r\n        <ProductId>HT-1001</ProductId>\r\n        <ProductName>Word</ProductName>\r\n        <Category>Software</Category>\r\n        <Quantity>10</Quantity>\r\n        <CurrencyCode>EUR</CurrencyCode>\r\n        <Price>799.00</Price>\r\n    </Item>\r\n    <Item ItemNumber=\"20\" PurchaseOrderNumber=\"\" OrderDate=\"\">\r\n        <ProductId>HT-1002</ProductId>\r\n        <ProductName>Gaming Keyboard XXL</ProductName>\r\n        <Category>Keyboards</Category>\r\n        <Quantity>4</Quantity>\r\n        <CurrencyCode>EUR</CurrencyCode>\r\n        <Price>100.00</Price>\r\n    </Item>\r\n    <Item ItemNumber=\"30\" PurchaseOrderNumber=\"\" OrderDate=\"\">\r\n            <ProductId>HT-1003</ProductId>\r\n            <ProductName>Lenovo</ProductName>\r\n            <Category>Notebooks</Category>\r\n            <Quantity>2</Quantity>\r\n            <CurrencyCode>EUR</CurrencyCode>\r\n            <Price>899.00</Price>\r\n    </Item>\r\n</ns0:Order>",
+									"options": {
+										"raw": {
+											"language": "xml"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{host}}/http/PIP/Samples/MockedXISender",
+									"protocol": "https",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"http",
+										"PIP",
+										"Samples",
+										"MockedXISender"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Send Order EFGH US",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/xml",
+										"type": "text"
+									},
+									{
+										"key": "sender",
+										"value": "{{sender}}",
+										"type": "text"
+									},
+									{
+										"key": "interface",
+										"value": "{{interface}}",
+										"type": "text"
+									},
+									{
+										"key": "namespace",
+										"value": "{{namespace}}",
+										"type": "text"
+									},
+									{
+										"key": "host",
+										"value": "{{host}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "<?xml version='1.0' encoding='UTF-8'?>\r\n<ns0:Order xmlns:ns0=\"http://demo.sap.com/eip/recipient-list\" PurchaseOrderNumber=\"2A8004\" OrderDate=\"2019-05-06\">\r\n    <Supplier>EFGH</Supplier>\r\n    <Country>US</Country>\r\n    <Item ItemNumber=\"10\" PurchaseOrderNumber=\"\" OrderDate=\"\">\r\n        <ProductId>HT-1001</ProductId>\r\n        <ProductName>Word</ProductName>\r\n        <Category>Software</Category>\r\n        <Quantity>10</Quantity>\r\n        <CurrencyCode>EUR</CurrencyCode>\r\n        <Price>799.00</Price>\r\n    </Item>\r\n    <Item ItemNumber=\"20\" PurchaseOrderNumber=\"\" OrderDate=\"\">\r\n        <ProductId>HT-1002</ProductId>\r\n        <ProductName>Gaming Keyboard XXL</ProductName>\r\n        <Category>Keyboards</Category>\r\n        <Quantity>4</Quantity>\r\n        <CurrencyCode>EUR</CurrencyCode>\r\n        <Price>100.00</Price>\r\n    </Item>\r\n    <Item ItemNumber=\"30\" PurchaseOrderNumber=\"\" OrderDate=\"\">\r\n            <ProductId>HT-1003</ProductId>\r\n            <ProductName>Lenovo</ProductName>\r\n            <Category>Notebooks</Category>\r\n            <Quantity>2</Quantity>\r\n            <CurrencyCode>EUR</CurrencyCode>\r\n            <Price>899.00</Price>\r\n    </Item>\r\n</ns0:Order>",
+									"options": {
+										"raw": {
+											"language": "xml"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{host}}/http/PIP/Samples/MockedXISender",
+									"protocol": "https",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"http",
+										"PIP",
+										"Samples",
+										"MockedXISender"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"auth": {
+						"type": "basic",
+						"basic": [
+							{
+								"key": "password",
+								"value": "{{password}}",
+								"type": "string"
+							},
+							{
+								"key": "username",
+								"value": "{{username}}",
+								"type": "string"
+							}
+						]
+					},
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				}
+			],
+			"description": "Similar scenario like scenario 2 except that for one receiver the interface determination is bypassed\n\n- Scenario-specific integration flows of scenario 2 can be reused\n- However, for receiver 1 only one interface index defined (no interface condition), so interface can be maintained in receiver determination XSLT which allows to bypass the interface determination pipeline step\n- For receiver 2, interface determination XSLT is still defined",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.collectionVariables.set(\"scenario\", \"Scenario_2A\");",
+							"pm.collectionVariables.set(\"sender\", \"Sender_2A\");",
+							"pm.collectionVariables.set(\"interface\", \"PurchaseOrder.Create\");",
+							"pm.collectionVariables.set(\"receiver_1\", \"Receiver_21\");",
+							"pm.collectionVariables.set(\"receiver_2\", \"Receiver_22\");",
+							"pm.collectionVariables.set(\"pid\", \"PIP_Samples_\"+pm.collectionVariables.get(\"scenario\"));"
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Scenario 2B - Bypass Receiver Determination",
+			"item": [
+				{
+					"name": "Setup Partner Directory entries",
+					"item": [
+						{
+							"name": "Fetch PD Access Token",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);\r",
+											"postman.setEnvironmentVariable(\"apiAccessToken\", jsonData.access_token);\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "{{apipassword}}",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "{{apiusername}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"type": "text",
+										"value": "*/*"
+									}
+								],
+								"url": {
+									"raw": "https://{{apitokenhost}}/oauth/token?grant_type=client_credentials",
+									"protocol": "https",
+									"host": [
+										"{{apitokenhost}}"
+									],
+									"path": [
+										"oauth",
+										"token"
+									],
+									"query": [
+										{
+											"key": "grant_type",
+											"value": "client_credentials"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Map Alternative Partner to Partner ID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{apiAccessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"Agency\": \"{{sender}}\",\r\n  \"Scheme\": \"SenderInterface\",\r\n  \"Id\": \"{{interface}}\",\r\n  \"Pid\": \"{{pid}}\"\r\n}"
+								},
+								"url": {
+									"raw": "https://{{apihost}}/api/v1/AlternativePartners",
+									"protocol": "https",
+									"host": [
+										"{{apihost}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"AlternativePartners"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create MaxJMSRetries",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{apiAccessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\t\"Pid\": \"{{pid}}\",\r\n\t\"Id\": \"MaxJMSRetries\",\r\n\t\"Value\": \"2\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{apihost}}/api/v1/StringParameters",
+									"protocol": "https",
+									"host": [
+										"{{apihost}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"StringParameters"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create receiverDetermination String",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{apiAccessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\t\"Pid\": \"{{pid}}\",\r\n\t\"Id\": \"receiverDetermination\",\r\n\t\"Value\": \"{{receiver}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{apihost}}/api/v1/StringParameters",
+									"protocol": "https",
+									"host": [
+										"{{apihost}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"StringParameters"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create interfaceDetermination XSLT for R1",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "{{password}}",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "{{username}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/xml",
+										"type": "text"
+									},
+									{
+										"key": "Pid",
+										"value": "{{pid}}",
+										"type": "text"
+									},
+									{
+										"key": "id",
+										"value": "interfaceDetermination_{{receiver}}",
+										"type": "text"
+									},
+									{
+										"key": "token",
+										"value": "{{apiAccessToken}}",
+										"type": "text"
+									},
+									{
+										"key": "url",
+										"value": "https://{{apihost}}/api/v1/BinaryParameters",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<xsl:stylesheet version=\"3.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\">\r\n    <xsl:template match=\"/\">\r\n        <ns0:Interfaces xmlns:ns0=\"http://sap.com/xi/XI/System\">\r\n            <xsl:if test=\"/*:Order/Country = 'DE'\">\r\n                <Interface>\r\n                    <Index>1</Index>\r\n                    <Service>/PIP/Step07/Samples/Scenario_2/Receiver_21/IfIdx1</Service>\r\n                </Interface>\r\n            </xsl:if>\r\n            <xsl:if test=\"/*:Order/Country != 'DE'\">\r\n                <Interface>\r\n                    <Index>2</Index>\r\n                    <Service>/PIP/Step07/Samples/Scenario_2/Receiver_21/IfIdx2</Service>\r\n                </Interface>\r\n            </xsl:if>\r\n        </ns0:Interfaces>\r\n    </xsl:template>\r\n</xsl:stylesheet>",
+									"options": {
+										"raw": {
+											"language": "xml"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{host}}/http/pip/pd/xslt/upsert",
+									"protocol": "https",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"http",
+										"pip",
+										"pd",
+										"xslt",
+										"upsert"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Check Partner Directory entries",
+					"item": [
+						{
+							"name": "Fetch PD Access Token",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);\r",
+											"postman.setEnvironmentVariable(\"apiAccessToken\", jsonData.access_token);\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "{{apipassword}}",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "{{apiusername}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"type": "text",
+										"value": "*/*"
+									}
+								],
+								"url": {
+									"raw": "https://{{apitokenhost}}/oauth/token?grant_type=client_credentials",
+									"protocol": "https",
+									"host": [
+										"{{apitokenhost}}"
+									],
+									"path": [
+										"oauth",
+										"token"
+									],
+									"query": [
+										{
+											"key": "grant_type",
+											"value": "client_credentials"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Read Alternative Partner",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{apiAccessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"type": "text",
+										"value": "application/xml"
+									}
+								],
+								"url": {
+									"raw": "https://{{apihost}}/api/v1/AlternativePartners?$filter=Agency eq '{{sender}}' and Scheme eq 'SenderInterface' and Id eq '{{interface}}'&$select=Pid",
+									"protocol": "https",
+									"host": [
+										"{{apihost}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"AlternativePartners"
+									],
+									"query": [
+										{
+											"key": "$filter",
+											"value": "Agency eq '{{sender}}' and Scheme eq 'SenderInterface' and Id eq '{{interface}}'"
+										},
+										{
+											"key": "$select",
+											"value": "Pid"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Read MaxJMSRetries",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{apiAccessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://{{apihost}}/api/v1/StringParameters(Pid='{{pid}}',Id='MaxJMSRetries')",
+									"protocol": "https",
+									"host": [
+										"{{apihost}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"StringParameters(Pid='{{pid}}',Id='MaxJMSRetries')"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Read receiverDetermination String",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{apiAccessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://{{apihost}}/api/v1/StringParameters(Pid='{{pid}}',Id='receiverDetermination')",
+									"protocol": "https",
+									"host": [
+										"{{apihost}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"StringParameters(Pid='{{pid}}',Id='receiverDetermination')"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Read interfaceDetermination XSLT for R1",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "{{password}}",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "{{username}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "token",
+										"value": "{{apiAccessToken}}",
+										"type": "text"
+									},
+									{
+										"key": "Pid",
+										"value": "{{pid}}",
+										"type": "text"
+									},
+									{
+										"key": "id",
+										"value": "interfaceDetermination_{{receiver}}",
+										"type": "text"
+									},
+									{
+										"key": "url",
+										"value": "https://{{apihost}}/api/v1/BinaryParameters",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://{{host}}/http/pip/pd/xslt/read",
+									"protocol": "https",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"http",
+										"pip",
+										"pd",
+										"xslt",
+										"read"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Clean up Partner Directory",
+					"item": [
+						{
+							"name": "Fetch PD Access Token",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);\r",
+											"postman.setEnvironmentVariable(\"apiAccessToken\", jsonData.access_token);\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "{{apipassword}}",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "{{apiusername}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"type": "text",
+										"value": "*/*"
+									}
+								],
+								"url": {
+									"raw": "https://{{apitokenhost}}/oauth/token?grant_type=client_credentials",
+									"protocol": "https",
+									"host": [
+										"{{apitokenhost}}"
+									],
+									"path": [
+										"oauth",
+										"token"
+									],
+									"query": [
+										{
+											"key": "grant_type",
+											"value": "client_credentials"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Alternative Partner",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 204\", function () {\r",
+											"    pm.response.to.have.status(204);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{apiAccessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "https://{{apihost}}/api/v1/AlternativePartners(Hexagency='53656E6465725F3242',Hexscheme='53656E646572496E74657266616365',Hexid='50757263686173654F726465722E437265617465')",
+									"protocol": "https",
+									"host": [
+										"{{apihost}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"AlternativePartners(Hexagency='53656E6465725F3242',Hexscheme='53656E646572496E74657266616365',Hexid='50757263686173654F726465722E437265617465')"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete MaxJMSRetries",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 204\", function () {\r",
+											"    pm.response.to.have.status(204);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{apiAccessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "https://{{apihost}}/api/v1/StringParameters(Pid='{{pid}}',Id='MaxJMSRetries')",
+									"protocol": "https",
+									"host": [
+										"{{apihost}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"StringParameters(Pid='{{pid}}',Id='MaxJMSRetries')"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete receiverDetermination String",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 204\", function () {\r",
+											"    pm.response.to.have.status(204);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{apiAccessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "https://{{apihost}}/api/v1/StringParameters(Pid='{{pid}}',Id='receiverDetermination')",
+									"protocol": "https",
+									"host": [
+										"{{apihost}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"StringParameters(Pid='{{pid}}',Id='receiverDetermination')"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete interfaceDetermination XSLT for R1",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 204\", function () {\r",
+											"    pm.response.to.have.status(204);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{apiAccessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "https://{{apihost}}/api/v1/BinaryParameters(Pid='{{pid}}',Id='interfaceDetermination_{{receiver}}')",
+									"protocol": "https",
+									"host": [
+										"{{apihost}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"BinaryParameters(Pid='{{pid}}',Id='interfaceDetermination_{{receiver}}')"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Trigger sample messages",
+					"item": [
+						{
+							"name": "Send Order DE - Successful",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/xml",
+										"type": "text"
+									},
+									{
+										"key": "sender",
+										"value": "{{sender}}",
+										"type": "text"
+									},
+									{
+										"key": "interface",
+										"value": "{{interface}}",
+										"type": "text"
+									},
+									{
+										"key": "namespace",
+										"value": "{{namespace}}",
+										"type": "text"
+									},
+									{
+										"key": "host",
+										"value": "{{host}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "<?xml version='1.0' encoding='UTF-8'?>\r\n<ns0:Order xmlns:ns0=\"http://demo.sap.com/eip/recipient-list\" PurchaseOrderNumber=\"2B8001\" OrderDate=\"2019-05-06\">\r\n    <Supplier>ABCD</Supplier>\r\n    <Country>DE</Country>\r\n    <Item ItemNumber=\"10\" PurchaseOrderNumber=\"\" OrderDate=\"\">\r\n        <ProductId>HT-1001</ProductId>\r\n        <ProductName>Word</ProductName>\r\n        <Category>Software</Category>\r\n        <Quantity>10</Quantity>\r\n        <CurrencyCode>EUR</CurrencyCode>\r\n        <Price>799.00</Price>\r\n    </Item>\r\n    <Item ItemNumber=\"20\" PurchaseOrderNumber=\"\" OrderDate=\"\">\r\n        <ProductId>HT-1002</ProductId>\r\n        <ProductName>Gaming Keyboard XXL</ProductName>\r\n        <Category>Keyboards</Category>\r\n        <Quantity>4</Quantity>\r\n        <CurrencyCode>EUR</CurrencyCode>\r\n        <Price>100.00</Price>\r\n    </Item>\r\n    <Item ItemNumber=\"30\" PurchaseOrderNumber=\"\" OrderDate=\"\">\r\n            <ProductId>HT-1003</ProductId>\r\n            <ProductName>Lenovo</ProductName>\r\n            <Category>Notebooks</Category>\r\n            <Quantity>2</Quantity>\r\n            <CurrencyCode>EUR</CurrencyCode>\r\n            <Price>899.00</Price>\r\n    </Item>\r\n</ns0:Order>",
+									"options": {
+										"raw": {
+											"language": "xml"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{host}}/http/PIP/Samples/MockedXISender",
+									"protocol": "https",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"http",
+										"PIP",
+										"Samples",
+										"MockedXISender"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Send Order US - Successful",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/xml",
+										"type": "text"
+									},
+									{
+										"key": "sender",
+										"value": "{{sender}}",
+										"type": "text"
+									},
+									{
+										"key": "interface",
+										"value": "{{interface}}",
+										"type": "text"
+									},
+									{
+										"key": "namespace",
+										"value": "{{namespace}}",
+										"type": "text"
+									},
+									{
+										"key": "host",
+										"value": "{{host}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "<?xml version='1.0' encoding='UTF-8'?>\r\n<ns0:Order xmlns:ns0=\"http://demo.sap.com/eip/recipient-list\" PurchaseOrderNumber=\"2B8003\" OrderDate=\"2019-05-06\">\r\n    <Supplier>XXXX</Supplier>\r\n    <Country>US</Country>\r\n    <Item ItemNumber=\"10\" PurchaseOrderNumber=\"\" OrderDate=\"\">\r\n        <ProductId>HT-1001</ProductId>\r\n        <ProductName>Word</ProductName>\r\n        <Category>Software</Category>\r\n        <Quantity>10</Quantity>\r\n        <CurrencyCode>EUR</CurrencyCode>\r\n        <Price>799.00</Price>\r\n    </Item>\r\n    <Item ItemNumber=\"20\" PurchaseOrderNumber=\"\" OrderDate=\"\">\r\n        <ProductId>HT-1002</ProductId>\r\n        <ProductName>Gaming Keyboard XXL</ProductName>\r\n        <Category>Keyboards</Category>\r\n        <Quantity>4</Quantity>\r\n        <CurrencyCode>EUR</CurrencyCode>\r\n        <Price>100.00</Price>\r\n    </Item>\r\n    <Item ItemNumber=\"30\" PurchaseOrderNumber=\"\" OrderDate=\"\">\r\n            <ProductId>HT-1003</ProductId>\r\n            <ProductName>Lenovo</ProductName>\r\n            <Category>Notebooks</Category>\r\n            <Quantity>2</Quantity>\r\n            <CurrencyCode>EUR</CurrencyCode>\r\n            <Price>899.00</Price>\r\n    </Item>\r\n</ns0:Order>",
+									"options": {
+										"raw": {
+											"language": "xml"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{host}}/http/PIP/Samples/MockedXISender",
+									"protocol": "https",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"http",
+										"PIP",
+										"Samples",
+										"MockedXISender"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"auth": {
+						"type": "basic",
+						"basic": [
+							{
+								"key": "password",
+								"value": "{{password}}",
+								"type": "string"
+							},
+							{
+								"key": "username",
+								"value": "{{username}}",
+								"type": "string"
+							}
+						]
+					},
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				}
+			],
+			"description": "Similar scenario like scenario 2 except that the receiver determination is bypassed\n\n- Scenario-specific integration flows of scenario 2 can be reused\n- However, we stick to one receiver only, so receiver determination pipeline step can be bypassed\n    \n- For the receiver, interface determination is carried out",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.collectionVariables.set(\"scenario\", \"Scenario_2B\");",
+							"pm.collectionVariables.set(\"sender\", \"Sender_2B\");",
+							"pm.collectionVariables.set(\"interface\", \"PurchaseOrder.Create\");",
+							"pm.collectionVariables.set(\"namespace\", \"http://demo.sap.com/eip/recipient-list\");",
+							"pm.collectionVariables.set(\"receiver\", \"Receiver_21\");",
+							"pm.collectionVariables.set(\"pid\", \"PIP_Samples_\"+pm.collectionVariables.get(\"scenario\"));"
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Scenario 2C - Custom Extension for Interface Determination",
+			"item": [
+				{
+					"name": "Setup Partner Directory entries",
+					"item": [
+						{
+							"name": "Fetch PD Access Token",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);\r",
+											"postman.setEnvironmentVariable(\"apiAccessToken\", jsonData.access_token);\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "{{apipassword}}",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "{{apiusername}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"type": "text",
+										"value": "*/*"
+									}
+								],
+								"url": {
+									"raw": "https://{{apitokenhost}}/oauth/token?grant_type=client_credentials",
+									"protocol": "https",
+									"host": [
+										"{{apitokenhost}}"
+									],
+									"path": [
+										"oauth",
+										"token"
+									],
+									"query": [
+										{
+											"key": "grant_type",
+											"value": "client_credentials"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Map Alternative Partner to Partner ID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{apiAccessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"Agency\": \"{{sender}}\",\r\n  \"Scheme\": \"SenderInterface\",\r\n  \"Id\": \"{{interface}}\",\r\n  \"Pid\": \"{{pid}}\"\r\n}"
+								},
+								"url": {
+									"raw": "https://{{apihost}}/api/v1/AlternativePartners",
+									"protocol": "https",
+									"host": [
+										"{{apihost}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"AlternativePartners"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create MaxJMSRetries",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{apiAccessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\t\"Pid\": \"{{pid}}\",\r\n\t\"Id\": \"MaxJMSRetries\",\r\n\t\"Value\": \"2\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{apihost}}/api/v1/StringParameters",
+									"protocol": "https",
+									"host": [
+										"{{apihost}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"StringParameters"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create receiverDetermination String",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{apiAccessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\t\"Pid\": \"{{pid}}\",\r\n\t\"Id\": \"receiverDetermination\",\r\n\t\"Value\": \"{{receiver}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{apihost}}/api/v1/StringParameters",
+									"protocol": "https",
+									"host": [
+										"{{apihost}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"StringParameters"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create CustomXIDEndpoint",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{apiAccessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\t\"Pid\": \"{{pid}}\",\r\n\t\"Id\": \"CustomXIDEndpoint\",\r\n\t\"Value\": \"/PIP/Step05/Samples/{{scenario}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{apihost}}/api/v1/StringParameters",
+									"protocol": "https",
+									"host": [
+										"{{apihost}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"StringParameters"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Check Partner Directory entries",
+					"item": [
+						{
+							"name": "Fetch PD Access Token",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);\r",
+											"postman.setEnvironmentVariable(\"apiAccessToken\", jsonData.access_token);\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "{{apipassword}}",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "{{apiusername}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"type": "text",
+										"value": "*/*"
+									}
+								],
+								"url": {
+									"raw": "https://{{apitokenhost}}/oauth/token?grant_type=client_credentials",
+									"protocol": "https",
+									"host": [
+										"{{apitokenhost}}"
+									],
+									"path": [
+										"oauth",
+										"token"
+									],
+									"query": [
+										{
+											"key": "grant_type",
+											"value": "client_credentials"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Read Alternative Partner",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{apiAccessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"type": "text",
+										"value": "application/xml"
+									}
+								],
+								"url": {
+									"raw": "https://{{apihost}}/api/v1/AlternativePartners?$filter=Agency eq '{{sender}}' and Scheme eq 'SenderInterface' and Id eq '{{interface}}'&$select=Pid",
+									"protocol": "https",
+									"host": [
+										"{{apihost}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"AlternativePartners"
+									],
+									"query": [
+										{
+											"key": "$filter",
+											"value": "Agency eq '{{sender}}' and Scheme eq 'SenderInterface' and Id eq '{{interface}}'"
+										},
+										{
+											"key": "$select",
+											"value": "Pid"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Read MaxJMSRetries",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{apiAccessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://{{apihost}}/api/v1/StringParameters(Pid='{{pid}}',Id='MaxJMSRetries')",
+									"protocol": "https",
+									"host": [
+										"{{apihost}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"StringParameters(Pid='{{pid}}',Id='MaxJMSRetries')"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Read receiverDetermination String",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{apiAccessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://{{apihost}}/api/v1/StringParameters(Pid='{{pid}}',Id='receiverDetermination')",
+									"protocol": "https",
+									"host": [
+										"{{apihost}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"StringParameters(Pid='{{pid}}',Id='receiverDetermination')"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Read CustomXIDEndpoint",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{apiAccessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://{{apihost}}/api/v1/StringParameters(Pid='{{pid}}',Id='CustomXIDEndpoint')",
+									"protocol": "https",
+									"host": [
+										"{{apihost}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"StringParameters(Pid='{{pid}}',Id='CustomXIDEndpoint')"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Clean up Partner Directory",
+					"item": [
+						{
+							"name": "Fetch PD Access Token",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);\r",
+											"postman.setEnvironmentVariable(\"apiAccessToken\", jsonData.access_token);\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "{{apipassword}}",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "{{apiusername}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"type": "text",
+										"value": "*/*"
+									}
+								],
+								"url": {
+									"raw": "https://{{apitokenhost}}/oauth/token?grant_type=client_credentials",
+									"protocol": "https",
+									"host": [
+										"{{apitokenhost}}"
+									],
+									"path": [
+										"oauth",
+										"token"
+									],
+									"query": [
+										{
+											"key": "grant_type",
+											"value": "client_credentials"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Alternative Partner",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 204\", function () {\r",
+											"    pm.response.to.have.status(204);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{apiAccessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "https://{{apihost}}/api/v1/AlternativePartners(Hexagency='53656E6465725F3242',Hexscheme='53656E646572496E74657266616365',Hexid='50757263686173654F726465722E437265617465')",
+									"protocol": "https",
+									"host": [
+										"{{apihost}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"AlternativePartners(Hexagency='53656E6465725F3242',Hexscheme='53656E646572496E74657266616365',Hexid='50757263686173654F726465722E437265617465')"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete MaxJMSRetries",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 204\", function () {\r",
+											"    pm.response.to.have.status(204);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{apiAccessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "https://{{apihost}}/api/v1/StringParameters(Pid='{{pid}}',Id='MaxJMSRetries')",
+									"protocol": "https",
+									"host": [
+										"{{apihost}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"StringParameters(Pid='{{pid}}',Id='MaxJMSRetries')"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete receiverDetermination String",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 204\", function () {\r",
+											"    pm.response.to.have.status(204);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{apiAccessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "https://{{apihost}}/api/v1/StringParameters(Pid='{{pid}}',Id='receiverDetermination')",
+									"protocol": "https",
+									"host": [
+										"{{apihost}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"StringParameters(Pid='{{pid}}',Id='receiverDetermination')"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete CustomXIDEndpoint",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{apiAccessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "https://{{apihost}}/api/v1/StringParameters(Pid='{{pid}}',Id='CustomXIDEndpoint')",
+									"protocol": "https",
+									"host": [
+										"{{apihost}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"StringParameters(Pid='{{pid}}',Id='CustomXIDEndpoint')"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Trigger sample messages",
+					"item": [
+						{
+							"name": "Send Order DE - Successful",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/xml",
+										"type": "text"
+									},
+									{
+										"key": "sender",
+										"value": "{{sender}}",
+										"type": "text"
+									},
+									{
+										"key": "interface",
+										"value": "{{interface}}",
+										"type": "text"
+									},
+									{
+										"key": "namespace",
+										"value": "{{namespace}}",
+										"type": "text"
+									},
+									{
+										"key": "host",
+										"value": "{{host}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "<?xml version='1.0' encoding='UTF-8'?>\r\n<ns0:Order xmlns:ns0=\"http://demo.sap.com/eip/recipient-list\" PurchaseOrderNumber=\"2C8001\" OrderDate=\"2019-05-06\">\r\n    <Supplier>ABCD</Supplier>\r\n    <Country>DE</Country>\r\n    <Item ItemNumber=\"10\" PurchaseOrderNumber=\"\" OrderDate=\"\">\r\n        <ProductId>HT-1001</ProductId>\r\n        <ProductName>Word</ProductName>\r\n        <Category>Software</Category>\r\n        <Quantity>10</Quantity>\r\n        <CurrencyCode>EUR</CurrencyCode>\r\n        <Price>799.00</Price>\r\n    </Item>\r\n    <Item ItemNumber=\"20\" PurchaseOrderNumber=\"\" OrderDate=\"\">\r\n        <ProductId>HT-1002</ProductId>\r\n        <ProductName>Gaming Keyboard XXL</ProductName>\r\n        <Category>Keyboards</Category>\r\n        <Quantity>4</Quantity>\r\n        <CurrencyCode>EUR</CurrencyCode>\r\n        <Price>100.00</Price>\r\n    </Item>\r\n    <Item ItemNumber=\"30\" PurchaseOrderNumber=\"\" OrderDate=\"\">\r\n            <ProductId>HT-1003</ProductId>\r\n            <ProductName>Lenovo</ProductName>\r\n            <Category>Notebooks</Category>\r\n            <Quantity>2</Quantity>\r\n            <CurrencyCode>EUR</CurrencyCode>\r\n            <Price>899.00</Price>\r\n    </Item>\r\n</ns0:Order>",
+									"options": {
+										"raw": {
+											"language": "xml"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{host}}/http/PIP/Samples/MockedXISender",
+									"protocol": "https",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"http",
+										"PIP",
+										"Samples",
+										"MockedXISender"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Send Order US - Successful",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/xml",
+										"type": "text"
+									},
+									{
+										"key": "sender",
+										"value": "{{sender}}",
+										"type": "text"
+									},
+									{
+										"key": "interface",
+										"value": "{{interface}}",
+										"type": "text"
+									},
+									{
+										"key": "namespace",
+										"value": "{{namespace}}",
+										"type": "text"
+									},
+									{
+										"key": "host",
+										"value": "{{host}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "<?xml version='1.0' encoding='UTF-8'?>\r\n<ns0:Order xmlns:ns0=\"http://demo.sap.com/eip/recipient-list\" PurchaseOrderNumber=\"2C8003\" OrderDate=\"2019-05-06\">\r\n    <Supplier>XXXX</Supplier>\r\n    <Country>US</Country>\r\n    <Item ItemNumber=\"10\" PurchaseOrderNumber=\"\" OrderDate=\"\">\r\n        <ProductId>HT-1001</ProductId>\r\n        <ProductName>Word</ProductName>\r\n        <Category>Software</Category>\r\n        <Quantity>10</Quantity>\r\n        <CurrencyCode>EUR</CurrencyCode>\r\n        <Price>799.00</Price>\r\n    </Item>\r\n    <Item ItemNumber=\"20\" PurchaseOrderNumber=\"\" OrderDate=\"\">\r\n        <ProductId>HT-1002</ProductId>\r\n        <ProductName>Gaming Keyboard XXL</ProductName>\r\n        <Category>Keyboards</Category>\r\n        <Quantity>4</Quantity>\r\n        <CurrencyCode>EUR</CurrencyCode>\r\n        <Price>100.00</Price>\r\n    </Item>\r\n    <Item ItemNumber=\"30\" PurchaseOrderNumber=\"\" OrderDate=\"\">\r\n            <ProductId>HT-1003</ProductId>\r\n            <ProductName>Lenovo</ProductName>\r\n            <Category>Notebooks</Category>\r\n            <Quantity>2</Quantity>\r\n            <CurrencyCode>EUR</CurrencyCode>\r\n            <Price>899.00</Price>\r\n    </Item>\r\n</ns0:Order>",
+									"options": {
+										"raw": {
+											"language": "xml"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{host}}/http/PIP/Samples/MockedXISender",
+									"protocol": "https",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"http",
+										"PIP",
+										"Samples",
+										"MockedXISender"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"auth": {
+						"type": "basic",
+						"basic": [
+							{
+								"key": "password",
+								"value": "{{password}}",
+								"type": "string"
+							},
+							{
+								"key": "username",
+								"value": "{{username}}",
+								"type": "string"
+							}
+						]
+					},
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				}
+			],
+			"description": "Scenario with one receiver and multiple interfaces using custom interface determination instead of XSLT\n\n- Similar scenario like scenario 2 and 2B so scenario-specific integration flows of scenario 2 can be reused\n    \n- Like in scenario 2B, we stick to one receiver only, so receiver determination pipeline step can be bypassed\n    \n- For the receiver, interface determination is carried out calling an integration flow via ProcessDirect instead of the XSLT from the Partner Directory",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.collectionVariables.set(\"scenario\", \"Scenario_2C\");",
+							"pm.collectionVariables.set(\"sender\", \"Sender_2C\");",
+							"pm.collectionVariables.set(\"interface\", \"PurchaseOrder.Create\");",
+							"pm.collectionVariables.set(\"namespace\", \"http://demo.sap.com/eip/recipient-list\");",
+							"pm.collectionVariables.set(\"receiver\", \"Receiver_21\");",
 							"pm.collectionVariables.set(\"pid\", \"PIP_Samples_\"+pm.collectionVariables.get(\"scenario\"));"
 						]
 					}
@@ -7706,6 +11009,1032 @@
 			]
 		},
 		{
+			"name": "Scenario 4A -  Custom Extension for Receiver Determination",
+			"item": [
+				{
+					"name": "Setup Partner Directory entries",
+					"item": [
+						{
+							"name": "Fetch PD Access Token",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);\r",
+											"postman.setEnvironmentVariable(\"apiAccessToken\", jsonData.access_token);\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "{{apipassword}}",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "{{apiusername}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"type": "text",
+										"value": "*/*"
+									}
+								],
+								"url": {
+									"raw": "https://{{apitokenhost}}/oauth/token?grant_type=client_credentials",
+									"protocol": "https",
+									"host": [
+										"{{apitokenhost}}"
+									],
+									"path": [
+										"oauth",
+										"token"
+									],
+									"query": [
+										{
+											"key": "grant_type",
+											"value": "client_credentials"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Map Alternative Partner to Partner ID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{apiAccessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"Agency\": \"{{sender}}\",\r\n  \"Scheme\": \"SenderInterface\",\r\n  \"Id\": \"{{interface}}\",\r\n  \"Pid\": \"{{pid}}\"\r\n}"
+								},
+								"url": {
+									"raw": "https://{{apihost}}/api/v1/AlternativePartners",
+									"protocol": "https",
+									"host": [
+										"{{apihost}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"AlternativePartners"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create InboundConversionEndpoint",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{apiAccessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\t\"Pid\": \"{{pid}}\",\r\n\t\"Id\": \"InboundConversionEndpoint\",\r\n\t\"Value\": \"/PIP/Step03/Samples/Scenario_4\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{apihost}}/api/v1/StringParameters",
+									"protocol": "https",
+									"host": [
+										"{{apihost}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"StringParameters"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create MaxJMSRetries",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{apiAccessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\t\"Pid\": \"{{pid}}\",\r\n\t\"Id\": \"MaxJMSRetries\",\r\n\t\"Value\": \"3\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{apihost}}/api/v1/StringParameters",
+									"protocol": "https",
+									"host": [
+										"{{apihost}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"StringParameters"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create CustomXRDEndpoint",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{apiAccessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\t\"Pid\": \"{{pid}}\",\r\n\t\"Id\": \"CustomXRDEndpoint\",\r\n\t\"Value\": \"/PIP/Step04/Samples/{{scenario}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{apihost}}/api/v1/StringParameters",
+									"protocol": "https",
+									"host": [
+										"{{apihost}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"StringParameters"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Check Partner Directory entries",
+					"item": [
+						{
+							"name": "Fetch PD Access Token",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);\r",
+											"postman.setEnvironmentVariable(\"apiAccessToken\", jsonData.access_token);\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "{{apipassword}}",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "{{apiusername}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"type": "text",
+										"value": "*/*"
+									}
+								],
+								"url": {
+									"raw": "https://{{apitokenhost}}/oauth/token?grant_type=client_credentials",
+									"protocol": "https",
+									"host": [
+										"{{apitokenhost}}"
+									],
+									"path": [
+										"oauth",
+										"token"
+									],
+									"query": [
+										{
+											"key": "grant_type",
+											"value": "client_credentials"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Read Alternative Partner",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{apiAccessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"type": "text",
+										"value": "application/xml"
+									}
+								],
+								"url": {
+									"raw": "https://{{apihost}}/api/v1/AlternativePartners?$filter=Agency eq '{{sender}}' and Scheme eq 'SenderInterface' and Id eq '{{interface}}'&$select=Pid",
+									"protocol": "https",
+									"host": [
+										"{{apihost}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"AlternativePartners"
+									],
+									"query": [
+										{
+											"key": "$filter",
+											"value": "Agency eq '{{sender}}' and Scheme eq 'SenderInterface' and Id eq '{{interface}}'"
+										},
+										{
+											"key": "$select",
+											"value": "Pid"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Read InboundConversionEndpoint",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{apiAccessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://{{apihost}}/api/v1/StringParameters(Pid='{{pid}}',Id='InboundConversionEndpoint')",
+									"protocol": "https",
+									"host": [
+										"{{apihost}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"StringParameters(Pid='{{pid}}',Id='InboundConversionEndpoint')"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Read MaxJMSRetries",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{apiAccessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://{{apihost}}/api/v1/StringParameters(Pid='{{pid}}',Id='MaxJMSRetries')",
+									"protocol": "https",
+									"host": [
+										"{{apihost}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"StringParameters(Pid='{{pid}}',Id='MaxJMSRetries')"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Read CustomXRDEndpoint",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{apiAccessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://{{apihost}}/api/v1/StringParameters(Pid='{{pid}}',Id='CustomXRDEndpoint')",
+									"protocol": "https",
+									"host": [
+										"{{apihost}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"StringParameters(Pid='{{pid}}',Id='CustomXRDEndpoint')"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Clean up Partner Directory Copy",
+					"item": [
+						{
+							"name": "Fetch PD Access Token",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);\r",
+											"postman.setEnvironmentVariable(\"apiAccessToken\", jsonData.access_token);\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "{{apipassword}}",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "{{apiusername}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"type": "text",
+										"value": "*/*"
+									}
+								],
+								"url": {
+									"raw": "https://{{apitokenhost}}/oauth/token?grant_type=client_credentials",
+									"protocol": "https",
+									"host": [
+										"{{apitokenhost}}"
+									],
+									"path": [
+										"oauth",
+										"token"
+									],
+									"query": [
+										{
+											"key": "grant_type",
+											"value": "client_credentials"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Alternative Partner",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 204\", function () {\r",
+											"    pm.response.to.have.status(204);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{apiAccessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "https://{{apihost}}/api/v1/AlternativePartners(Hexagency='53656E6465725F3441',Hexscheme='53656E646572496E74657266616365',Hexid='50757263686173654F726465724974656D2E437265617465')",
+									"protocol": "https",
+									"host": [
+										"{{apihost}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"AlternativePartners(Hexagency='53656E6465725F3441',Hexscheme='53656E646572496E74657266616365',Hexid='50757263686173654F726465724974656D2E437265617465')"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete InboundConversionEndpoint",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{apiAccessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "https://{{apihost}}/api/v1/StringParameters(Pid='{{pid}}',Id='InboundConversionEndpoint')",
+									"protocol": "https",
+									"host": [
+										"{{apihost}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"StringParameters(Pid='{{pid}}',Id='InboundConversionEndpoint')"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete MaxJMSRetries",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{apiAccessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "https://{{apihost}}/api/v1/StringParameters(Pid='{{pid}}',Id='MaxJMSRetries')",
+									"protocol": "https",
+									"host": [
+										"{{apihost}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"StringParameters(Pid='{{pid}}',Id='MaxJMSRetries')"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete CustomXRDEndpoint",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{apiAccessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "https://{{apihost}}/api/v1/StringParameters(Pid='{{pid}}',Id='CustomXRDEndpoint')",
+									"protocol": "https",
+									"host": [
+										"{{apihost}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"StringParameters(Pid='{{pid}}',Id='CustomXRDEndpoint')"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Trigger sample messages",
+					"item": [
+						{
+							"name": "Send Order Software - Successful",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "SAP_Sender",
+										"value": "{{sender}}",
+										"type": "text"
+									},
+									{
+										"key": "SAP_SenderInterface",
+										"value": "{{interface}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"ns0:Item\":{\r\n        \"@PurchaseOrderNumber\":\"4A0401\",\r\n        \"@OrderDate\":\"2019-05-06\",\r\n        \"@ItemNumber\":\"10\",\r\n        \"ProductId\":\"HT-XXXX\",\r\n        \"ProductName\":\"XXXX\",\r\n        \"Category\":\"Software\",\r\n        \"Quantity\":\"10\",\r\n        \"CurrencyCode\":\"EUR\",\r\n        \"Price\":\"799.00\"\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{host}}/http/PIP/Step01/Samples/Scenario_4",
+									"protocol": "https",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"http",
+										"PIP",
+										"Step01",
+										"Samples",
+										"Scenario_4"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Send Order Keyboards - Successful",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "SAP_Sender",
+										"value": "{{sender}}",
+										"type": "text"
+									},
+									{
+										"key": "SAP_SenderInterface",
+										"value": "{{interface}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"ns0:Item\":{\r\n        \"@PurchaseOrderNumber\":\"4A0402\",\r\n        \"@OrderDate\":\"2019-05-06\",\r\n        \"@ItemNumber\":\"10\",\r\n        \"ProductId\":\"HT-XXXX\",\r\n        \"ProductName\":\"XXXX\",\r\n        \"Category\":\"Keyboards\",\r\n        \"Quantity\":\"10\",\r\n        \"CurrencyCode\":\"EUR\",\r\n        \"Price\":\"799.00\"\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{host}}/http/PIP/Step01/Samples/Scenario_4",
+									"protocol": "https",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"http",
+										"PIP",
+										"Step01",
+										"Samples",
+										"Scenario_4"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Send Order Notebooks - Successful",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "SAP_Sender",
+										"value": "{{sender}}",
+										"type": "text"
+									},
+									{
+										"key": "SAP_SenderInterface",
+										"value": "{{interface}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"ns0:Item\":{\r\n        \"@PurchaseOrderNumber\":\"4A0403\",\r\n        \"@OrderDate\":\"2019-05-06\",\r\n        \"@ItemNumber\":\"10\",\r\n        \"ProductId\":\"HT-XXXX\",\r\n        \"ProductName\":\"XXXX\",\r\n        \"Category\":\"Notebooks\",\r\n        \"Quantity\":\"10\",\r\n        \"CurrencyCode\":\"EUR\",\r\n        \"Price\":\"799.00\"\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{host}}/http/PIP/Step01/Samples/Scenario_4",
+									"protocol": "https",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"http",
+										"PIP",
+										"Step01",
+										"Samples",
+										"Scenario_4"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Send Order Other - Successful Default Receiver",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "SAP_Sender",
+										"value": "{{sender}}",
+										"type": "text"
+									},
+									{
+										"key": "SAP_SenderInterface",
+										"value": "{{interface}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"ns0:Item\":{\r\n        \"@PurchaseOrderNumber\":\"4A0404\",\r\n        \"@OrderDate\":\"2019-05-06\",\r\n        \"@ItemNumber\":\"10\",\r\n        \"ProductId\":\"HT-XXXX\",\r\n        \"ProductName\":\"XXXX\",\r\n        \"Category\":\"Other\",\r\n        \"Quantity\":\"10\",\r\n        \"CurrencyCode\":\"EUR\",\r\n        \"Price\":\"799.00\"\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{host}}/http/PIP/Step01/Samples/Scenario_4",
+									"protocol": "https",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"http",
+										"PIP",
+										"Step01",
+										"Samples",
+										"Scenario_4"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"auth": {
+						"type": "basic",
+						"basic": [
+							{
+								"key": "password",
+								"value": "{{password}}",
+								"type": "string"
+							},
+							{
+								"key": "username",
+								"value": "{{username}}",
+								"type": "string"
+							}
+						]
+					},
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				}
+			],
+			"description": "Scenario with multiple receivers and custom receiver determination instead of XSLT\n\n- Similar to scenario 4 hence reusing scenario-specific integration flows from scenario 4\n- Leveraging custom extension via ProcessDirect to carry out the receiver determination\n- One interface per receiver, hence bypassing the interface determination pipeline step",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.collectionVariables.set(\"scenario\", \"Scenario_4A\");",
+							"pm.collectionVariables.set(\"sender\", \"Sender_4A\");",
+							"pm.collectionVariables.set(\"interface\", \"PurchaseOrderItem.Create\");",
+							"pm.collectionVariables.set(\"receiver_1\", \"Receiver_41\");",
+							"pm.collectionVariables.set(\"receiver_2\", \"Receiver_42\");",
+							"pm.collectionVariables.set(\"receiver_3\", \"Receiver_43\");",
+							"pm.collectionVariables.set(\"pid\", \"PIP_Samples_\"+pm.collectionVariables.get(\"scenario\"));"
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
 			"name": "Scenario 5 - Point-to-Point",
 			"item": [
 				{
@@ -8089,7 +12418,7 @@
 							"response": []
 						},
 						{
-							"name": "Read Alternative Partners",
+							"name": "Read Alternative Partner for S1",
 							"event": [
 								{
 									"listen": "test",
@@ -8123,7 +12452,7 @@
 									}
 								],
 								"url": {
-									"raw": "https://{{apihost}}/api/v1/AlternativePartners?$filter=Pid eq '{{pid}}'",
+									"raw": "https://{{apihost}}/api/v1/AlternativePartners?$filter=Agency eq '{{sender_1}}' and Scheme eq 'SenderInterface' and Id eq '{{interface}}'&$select=Pid",
 									"protocol": "https",
 									"host": [
 										"{{apihost}}"
@@ -8136,8 +12465,114 @@
 									"query": [
 										{
 											"key": "$filter",
-											"value": "Pid eq '{{pid}}'"
+											"value": "Agency eq '{{sender_1}}' and Scheme eq 'SenderInterface' and Id eq '{{interface}}'"
+										},
+										{
+											"key": "$select",
+											"value": "Pid"
 										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Read Alternative Partner for S2",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{apiAccessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"type": "text",
+										"value": "application/xml"
+									}
+								],
+								"url": {
+									"raw": "https://{{apihost}}/api/v1/AlternativePartners?$filter=Agency eq '{{sender_2}}' and Scheme eq 'SenderInterface' and Id eq '{{interface}}'&$select=Pid",
+									"protocol": "https",
+									"host": [
+										"{{apihost}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"AlternativePartners"
+									],
+									"query": [
+										{
+											"key": "$filter",
+											"value": "Agency eq '{{sender_2}}' and Scheme eq 'SenderInterface' and Id eq '{{interface}}'"
+										},
+										{
+											"key": "$select",
+											"value": "Pid"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Read MaxJMSRetries",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{apiAccessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://{{apihost}}/api/v1/StringParameters(Pid='{{pid}}',Id='MaxJMSRetries')",
+									"protocol": "https",
+									"host": [
+										"{{apihost}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"StringParameters(Pid='{{pid}}',Id='MaxJMSRetries')"
 									]
 								}
 							},
@@ -8198,49 +12633,6 @@
 										"api",
 										"v1",
 										"StringParameters(Pid='{{pid}}',Id='interfaceDetermination_{{receiver}}')"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Read MaxJMSRetries",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"pm.test(\"Status code is 200\", function () {\r",
-											"    pm.response.to.have.status(200);\r",
-											"});"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "{{apiAccessToken}}",
-											"type": "string"
-										}
-									]
-								},
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "https://{{apihost}}/api/v1/StringParameters(Pid='{{pid}}',Id='MaxJMSRetries')",
-									"protocol": "https",
-									"host": [
-										"{{apihost}}"
-									],
-									"path": [
-										"api",
-										"v1",
-										"StringParameters(Pid='{{pid}}',Id='MaxJMSRetries')"
 									]
 								}
 							},
@@ -8461,7 +12853,7 @@
 								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "https://{{apihost}}/api/v1/AlternativePartners(Hexagency='53656E6465725F3231',Hexscheme='53656E646572496E74657266616365',Hexid='50757263686173654F726465722E437265617465')",
+									"raw": "https://{{apihost}}/api/v1/AlternativePartners(Hexagency='53656E6465725F3531',Hexscheme='53656E646572496E74657266616365',Hexid='53616C65734F726465722E437265617465')",
 									"protocol": "https",
 									"host": [
 										"{{apihost}}"
@@ -8469,7 +12861,7 @@
 									"path": [
 										"api",
 										"v1",
-										"AlternativePartners(Hexagency='53656E6465725F3231',Hexscheme='53656E646572496E74657266616365',Hexid='50757263686173654F726465722E437265617465')"
+										"AlternativePartners(Hexagency='53656E6465725F3531',Hexscheme='53656E646572496E74657266616365',Hexid='53616C65734F726465722E437265617465')"
 									]
 								}
 							},
@@ -8504,7 +12896,7 @@
 								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "https://{{apihost}}/api/v1/AlternativePartners(Hexagency='53656E6465725F3232',Hexscheme='53656E646572496E74657266616365',Hexid='50757263686173654F726465722E437265617465')",
+									"raw": "https://{{apihost}}/api/v1/AlternativePartners(Hexagency='53656E6465725F3532',Hexscheme='53656E646572496E74657266616365',Hexid='53616C65734F726465722E437265617465')",
 									"protocol": "https",
 									"host": [
 										"{{apihost}}"
@@ -8512,7 +12904,7 @@
 									"path": [
 										"api",
 										"v1",
-										"AlternativePartners(Hexagency='53656E6465725F3232',Hexscheme='53656E646572496E74657266616365',Hexid='50757263686173654F726465722E437265617465')"
+										"AlternativePartners(Hexagency='53656E6465725F3532',Hexscheme='53656E646572496E74657266616365',Hexid='53616C65734F726465722E437265617465')"
 									]
 								}
 							},
@@ -8590,7 +12982,7 @@
 								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "https://{{apihost}}/api/v1/BinaryParameters(Pid='{{pid}}',Id='receiverDetermination')",
+									"raw": "https://{{apihost}}/api/v1/StringParameters(Pid='{{pid}}',Id='receiverDetermination')",
 									"protocol": "https",
 									"host": [
 										"{{apihost}}"
@@ -8598,7 +12990,7 @@
 									"path": [
 										"api",
 										"v1",
-										"BinaryParameters(Pid='{{pid}}',Id='receiverDetermination')"
+										"StringParameters(Pid='{{pid}}',Id='receiverDetermination')"
 									]
 								}
 							},
@@ -8633,7 +13025,7 @@
 								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "https://{{apihost}}/api/v1/BinaryParameters(Pid='{{pid}}',Id='interfaceDetermination_{{receiver}}')",
+									"raw": "https://{{apihost}}/api/v1/StringParameters(Pid='{{pid}}',Id='interfaceDetermination_{{receiver}}')",
 									"protocol": "https",
 									"host": [
 										"{{apihost}}"
@@ -8641,7 +13033,7 @@
 									"path": [
 										"api",
 										"v1",
-										"BinaryParameters(Pid='{{pid}}',Id='interfaceDetermination_{{receiver}}')"
+										"StringParameters(Pid='{{pid}}',Id='interfaceDetermination_{{receiver}}')"
 									]
 								}
 							},
@@ -8810,7 +13202,7 @@
 					]
 				}
 			],
-			"description": "Sample Point-to-Point scenario with Bypass Option",
+			"description": "Sample Point-to-Point scenario with P2P Bypass Option",
 			"event": [
 				{
 					"listen": "prerequest",
@@ -9168,7 +13560,7 @@
 							"response": []
 						},
 						{
-							"name": "Read Alternative Partners",
+							"name": "Read Alternative Partner",
 							"event": [
 								{
 									"listen": "test",
@@ -9202,7 +13594,7 @@
 									}
 								],
 								"url": {
-									"raw": "https://{{apihost}}/api/v1/AlternativePartners?$filter=Pid eq '{{pid}}'",
+									"raw": "https://{{apihost}}/api/v1/AlternativePartners?$filter=Agency eq '{{sender}}' and Scheme eq 'SenderInterface' and Id eq '{{interface}}'&$select=Pid",
 									"protocol": "https",
 									"host": [
 										"{{apihost}}"
@@ -9215,7 +13607,11 @@
 									"query": [
 										{
 											"key": "$filter",
-											"value": "Pid eq '{{pid}}'"
+											"value": "Agency eq '{{sender}}' and Scheme eq 'SenderInterface' and Id eq '{{interface}}'"
+										},
+										{
+											"key": "$select",
+											"value": "Pid"
 										}
 									]
 								}
@@ -9626,7 +14022,7 @@
 								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "https://{{apihost}}/api/v1/BinaryParameters(Pid='{{pid}}',Id='receiverDetermination')",
+									"raw": "https://{{apihost}}/api/v1/StringParameters(Pid='{{pid}}',Id='receiverDetermination')",
 									"protocol": "https",
 									"host": [
 										"{{apihost}}"
@@ -9634,7 +14030,7 @@
 									"path": [
 										"api",
 										"v1",
-										"BinaryParameters(Pid='{{pid}}',Id='receiverDetermination')"
+										"StringParameters(Pid='{{pid}}',Id='receiverDetermination')"
 									]
 								}
 							},
@@ -9669,7 +14065,7 @@
 								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "https://{{apihost}}/api/v1/BinaryParameters(Pid='{{pid}}',Id='interfaceDetermination_{{receiver}}')",
+									"raw": "https://{{apihost}}/api/v1/StringParameters(Pid='{{pid}}',Id='interfaceDetermination_{{receiver}}')",
 									"protocol": "https",
 									"host": [
 										"{{apihost}}"
@@ -9677,7 +14073,7 @@
 									"path": [
 										"api",
 										"v1",
-										"BinaryParameters(Pid='{{pid}}',Id='interfaceDetermination_{{receiver}}')"
+										"StringParameters(Pid='{{pid}}',Id='interfaceDetermination_{{receiver}}')"
 									]
 								}
 							},
@@ -9867,6 +14263,1193 @@
 							"pm.collectionVariables.set(\"sender\", \"S4HCLNT601\");",
 							"pm.collectionVariables.set(\"interface\", \"FLIGHTBOOKING_CREATEFROMDAT.FLIGHTBOOKING_CREATEFROMDAT01\");",
 							"pm.collectionVariables.set(\"receiver\", \"Receiver_61\");",
+							"pm.collectionVariables.set(\"pid\", \"PIP_Samples_\"+pm.collectionVariables.get(\"scenario\"));"
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Scenario 7 -  RL with non-XML payload",
+			"item": [
+				{
+					"name": "Setup Partner Directory entries",
+					"item": [
+						{
+							"name": "Fetch PD Access Token",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);\r",
+											"postman.setEnvironmentVariable(\"apiAccessToken\", jsonData.access_token);\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "{{apipassword}}",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "{{apiusername}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"type": "text",
+										"value": "*/*"
+									}
+								],
+								"url": {
+									"raw": "https://{{apitokenhost}}/oauth/token?grant_type=client_credentials",
+									"protocol": "https",
+									"host": [
+										"{{apitokenhost}}"
+									],
+									"path": [
+										"oauth",
+										"token"
+									],
+									"query": [
+										{
+											"key": "grant_type",
+											"value": "client_credentials"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Map Alternative Partner to Partner ID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{apiAccessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"Agency\": \"{{sender}}\",\r\n  \"Scheme\": \"SenderInterface\",\r\n  \"Id\": \"{{interface}}\",\r\n  \"Pid\": \"{{pid}}\"\r\n}"
+								},
+								"url": {
+									"raw": "https://{{apihost}}/api/v1/AlternativePartners",
+									"protocol": "https",
+									"host": [
+										"{{apihost}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"AlternativePartners"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create receiverDetermination XSLT",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "{{password}}",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "{{username}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/xml",
+										"type": "text"
+									},
+									{
+										"key": "Pid",
+										"value": "{{pid}}",
+										"type": "text"
+									},
+									{
+										"key": "id",
+										"value": "receiverDetermination",
+										"type": "text"
+									},
+									{
+										"key": "token",
+										"value": "{{apiAccessToken}}",
+										"type": "text"
+									},
+									{
+										"key": "url",
+										"value": "https://{{apihost}}/api/v1/BinaryParameters",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<xsl:stylesheet version=\"3.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\">\r\n<!-- define header dc_country -->\r\n\t<xsl:param name=\"dc_country\"/>\r\n\t<xsl:template match=\"/\">\r\n        <ns0:Receivers xmlns:ns0=\"http://sap.com/xi/XI/System\">\r\n            <ReceiverNotDetermined>\r\n                <Type>Ignore</Type>\r\n                <DefaultReceiver/>\r\n            </ReceiverNotDetermined>\r\n    <xsl:if test=\"$dc_country = 'DE'\">\r\n            <Receiver>\r\n                <Service>{{receiver_1}}</Service>\r\n            </Receiver>\r\n    </xsl:if>\r\n    <xsl:if test=\"$dc_country != 'DE'\">\r\n            <Receiver>\r\n                <Service>{{receiver_2}}</Service>\r\n            </Receiver>\r\n    </xsl:if>\r\n        </ns0:Receivers>\r\n\t</xsl:template>\r\n</xsl:stylesheet>",
+									"options": {
+										"raw": {
+											"language": "xml"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{host}}/http/pip/pd/xslt/upsert",
+									"protocol": "https",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"http",
+										"pip",
+										"pd",
+										"xslt",
+										"upsert"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create interfaceDetermination XSLT for R1",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "{{password}}",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "{{username}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/xml",
+										"type": "text"
+									},
+									{
+										"key": "Pid",
+										"value": "{{pid}}",
+										"type": "text"
+									},
+									{
+										"key": "id",
+										"value": "interfaceDetermination_{{receiver_1}}",
+										"type": "text"
+									},
+									{
+										"key": "token",
+										"value": "{{apiAccessToken}}",
+										"type": "text"
+									},
+									{
+										"key": "url",
+										"value": "https://{{apihost}}/api/v1/BinaryParameters",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<xsl:stylesheet version=\"3.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\">\r\n    <xsl:template match=\"/\">\r\n        <ns0:Interfaces xmlns:ns0=\"http://sap.com/xi/XI/System\">\r\n            <Interface>\r\n                <Index>1</Index>\r\n                <Service>/PIP/Step07/Samples/{{scenario}}/{{receiver_1}}/IfIdx1</Service>\r\n            </Interface>\r\n        </ns0:Interfaces>\r\n    </xsl:template>\r\n</xsl:stylesheet>",
+									"options": {
+										"raw": {
+											"language": "xml"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{host}}/http/pip/pd/xslt/upsert",
+									"protocol": "https",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"http",
+										"pip",
+										"pd",
+										"xslt",
+										"upsert"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create interfaceDetermination XSLT for R2",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "{{password}}",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "{{username}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/xml",
+										"type": "text"
+									},
+									{
+										"key": "Pid",
+										"value": "{{pid}}",
+										"type": "text"
+									},
+									{
+										"key": "id",
+										"value": "interfaceDetermination_{{receiver_2}}",
+										"type": "text"
+									},
+									{
+										"key": "token",
+										"value": "{{apiAccessToken}}",
+										"type": "text"
+									},
+									{
+										"key": "url",
+										"value": "https://{{apihost}}/api/v1/BinaryParameters",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<xsl:stylesheet version=\"3.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\">\r\n<!-- define header dc_contentType -->\r\n\t<xsl:param name=\"dc_contentType\"/>\r\n    <xsl:template match=\"/\">\r\n        <ns0:Interfaces xmlns:ns0=\"http://sap.com/xi/XI/System\">\r\n    <xsl:if test=\"contains($dc_contentType, 'json')\">\r\n            <Interface>\r\n                <Index>1</Index>\r\n                <Service>/PIP/Step07/Samples/{{scenario}}/{{receiver_2}}/IfIdx1</Service>\r\n            </Interface>\r\n    </xsl:if>\r\n    <xsl:if test=\"contains($dc_contentType, 'csv')\">\r\n            <Interface>\r\n                <Index>2</Index>\r\n                <Service>/PIP/Step07/Samples/{{scenario}}/{{receiver_2}}/IfIdx2</Service>\r\n            </Interface>\r\n    </xsl:if>\r\n        </ns0:Interfaces>\r\n    </xsl:template>\r\n</xsl:stylesheet>",
+									"options": {
+										"raw": {
+											"language": "xml"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{host}}/http/pip/pd/xslt/upsert",
+									"protocol": "https",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"http",
+										"pip",
+										"pd",
+										"xslt",
+										"upsert"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Check Partner Directory entries",
+					"item": [
+						{
+							"name": "Fetch PD Access Token",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);\r",
+											"postman.setEnvironmentVariable(\"apiAccessToken\", jsonData.access_token);\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "{{apipassword}}",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "{{apiusername}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"type": "text",
+										"value": "*/*"
+									}
+								],
+								"url": {
+									"raw": "https://{{apitokenhost}}/oauth/token?grant_type=client_credentials",
+									"protocol": "https",
+									"host": [
+										"{{apitokenhost}}"
+									],
+									"path": [
+										"oauth",
+										"token"
+									],
+									"query": [
+										{
+											"key": "grant_type",
+											"value": "client_credentials"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Read Alternative Partner",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{apiAccessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"type": "text",
+										"value": "application/xml"
+									}
+								],
+								"url": {
+									"raw": "https://{{apihost}}/api/v1/AlternativePartners?$filter=Agency eq '{{sender}}' and Scheme eq 'SenderInterface' and Id eq '{{interface}}'&$select=Pid",
+									"protocol": "https",
+									"host": [
+										"{{apihost}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"AlternativePartners"
+									],
+									"query": [
+										{
+											"key": "$filter",
+											"value": "Agency eq '{{sender}}' and Scheme eq 'SenderInterface' and Id eq '{{interface}}'"
+										},
+										{
+											"key": "$select",
+											"value": "Pid"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Read receiverDetermination XSLT",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "{{password}}",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "{{username}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "token",
+										"value": "{{apiAccessToken}}",
+										"type": "text"
+									},
+									{
+										"key": "Pid",
+										"value": "{{pid}}",
+										"type": "text"
+									},
+									{
+										"key": "id",
+										"value": "receiverDetermination",
+										"type": "text"
+									},
+									{
+										"key": "url",
+										"value": "https://{{apihost}}/api/v1/BinaryParameters",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://{{host}}/http/pip/pd/xslt/read",
+									"protocol": "https",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"http",
+										"pip",
+										"pd",
+										"xslt",
+										"read"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Read interfaceDetermination XSLT for R1",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "{{password}}",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "{{username}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "token",
+										"value": "{{apiAccessToken}}",
+										"type": "text"
+									},
+									{
+										"key": "Pid",
+										"value": "{{pid}}",
+										"type": "text"
+									},
+									{
+										"key": "id",
+										"value": "interfaceDetermination_{{receiver_1}}",
+										"type": "text"
+									},
+									{
+										"key": "url",
+										"value": "https://{{apihost}}/api/v1/BinaryParameters",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://{{host}}/http/pip/pd/xslt/read",
+									"protocol": "https",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"http",
+										"pip",
+										"pd",
+										"xslt",
+										"read"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Read interfaceDetermination XSLT for R2",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "{{password}}",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "{{username}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "token",
+										"value": "{{apiAccessToken}}",
+										"type": "text"
+									},
+									{
+										"key": "Pid",
+										"value": "{{pid}}",
+										"type": "text"
+									},
+									{
+										"key": "id",
+										"value": "interfaceDetermination_{{receiver_2}}",
+										"type": "text"
+									},
+									{
+										"key": "url",
+										"value": "https://{{apihost}}/api/v1/BinaryParameters",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://{{host}}/http/pip/pd/xslt/read",
+									"protocol": "https",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"http",
+										"pip",
+										"pd",
+										"xslt",
+										"read"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Clean up Partner Directory Copy",
+					"item": [
+						{
+							"name": "Fetch PD Access Token",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);\r",
+											"postman.setEnvironmentVariable(\"apiAccessToken\", jsonData.access_token);\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "{{apipassword}}",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "{{apiusername}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"type": "text",
+										"value": "*/*"
+									}
+								],
+								"url": {
+									"raw": "https://{{apitokenhost}}/oauth/token?grant_type=client_credentials",
+									"protocol": "https",
+									"host": [
+										"{{apitokenhost}}"
+									],
+									"path": [
+										"oauth",
+										"token"
+									],
+									"query": [
+										{
+											"key": "grant_type",
+											"value": "client_credentials"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Alternative Partner",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 204\", function () {\r",
+											"    pm.response.to.have.status(204);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{apiAccessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "https://{{apihost}}/api/v1/AlternativePartners(Hexagency='53656E6465725F37',Hexscheme='53656E646572496E74657266616365',Hexid='506572736F6E2E437265617465')",
+									"protocol": "https",
+									"host": [
+										"{{apihost}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"AlternativePartners(Hexagency='53656E6465725F37',Hexscheme='53656E646572496E74657266616365',Hexid='506572736F6E2E437265617465')"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete receiverDetermination XSLT",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 204\", function () {\r",
+											"    pm.response.to.have.status(204);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{apiAccessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "https://{{apihost}}/api/v1/BinaryParameters(Pid='{{pid}}',Id='receiverDetermination')",
+									"protocol": "https",
+									"host": [
+										"{{apihost}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"BinaryParameters(Pid='{{pid}}',Id='receiverDetermination')"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete interfaceDetermination XSLT for R1",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{apiAccessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "https://{{apihost}}/api/v1/BinaryParameters(Pid='{{pid}}',Id='interfaceDetermination_{{receiver_1}}')",
+									"protocol": "https",
+									"host": [
+										"{{apihost}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"BinaryParameters(Pid='{{pid}}',Id='interfaceDetermination_{{receiver_1}}')"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete interfaceDetermination XSLT for R2",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{apiAccessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "https://{{apihost}}/api/v1/BinaryParameters(Pid='{{pid}}',Id='interfaceDetermination_{{receiver_2}}')",
+									"protocol": "https",
+									"host": [
+										"{{apihost}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"BinaryParameters(Pid='{{pid}}',Id='interfaceDetermination_{{receiver_2}}')"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Trigger sample messages",
+					"item": [
+						{
+							"name": "Send Person DE JSON - Successful",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "SAP_Sender",
+										"value": "{{sender}}",
+										"type": "text"
+									},
+									{
+										"key": "SAP_SenderInterface",
+										"value": "{{interface}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\":\"70000001\",\r\n    \"firstname\":\"Heike\",\r\n    \"lastname\":\"Schotte\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{host}}/http/PIP/Step01/Samples/{{scenario}}?country=DE",
+									"protocol": "https",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"http",
+										"PIP",
+										"Step01",
+										"Samples",
+										"{{scenario}}"
+									],
+									"query": [
+										{
+											"key": "country",
+											"value": "DE"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Send Person UK JSON - Successful",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "SAP_Sender",
+										"value": "{{sender}}",
+										"type": "text"
+									},
+									{
+										"key": "SAP_SenderInterface",
+										"value": "{{interface}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\":\"70000002\",\r\n    \"firstname\":\"Sarah\",\r\n    \"lastname\":\"Mayor\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{host}}/http/PIP/Step01/Samples/{{scenario}}?country=UK",
+									"protocol": "https",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"http",
+										"PIP",
+										"Step01",
+										"Samples",
+										"{{scenario}}"
+									],
+									"query": [
+										{
+											"key": "country",
+											"value": "UK"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Send Person UK CSV - Successful",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "text/csv",
+										"type": "text"
+									},
+									{
+										"key": "SAP_Sender",
+										"value": "{{sender}}",
+										"type": "text"
+									},
+									{
+										"key": "SAP_SenderInterface",
+										"value": "{{interface}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "70000003;Tom;Miller\r\n70000004;John;Doe",
+									"options": {
+										"raw": {
+											"language": "text"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{host}}/http/PIP/Step01/Samples/{{scenario}}?country=UK",
+									"protocol": "https",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"http",
+										"PIP",
+										"Step01",
+										"Samples",
+										"{{scenario}}"
+									],
+									"query": [
+										{
+											"key": "country",
+											"value": "UK"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"auth": {
+						"type": "basic",
+						"basic": [
+							{
+								"key": "password",
+								"value": "{{password}}",
+								"type": "string"
+							},
+							{
+								"key": "username",
+								"value": "{{username}}",
+								"type": "string"
+							}
+						]
+					},
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				}
+			],
+			"description": "Scenario with multiple receivers and JSON to JSON message mapping\n\n- Receiver determination based on header parameter\n    \n- Definition of dummy xml to avoid XSLT failing",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.collectionVariables.set(\"scenario\", \"Scenario_7\");",
+							"pm.collectionVariables.set(\"sender\", \"Sender_7\");",
+							"pm.collectionVariables.set(\"interface\", \"Person.Create\");",
+							"pm.collectionVariables.set(\"receiver_1\", \"Receiver_71\");",
+							"pm.collectionVariables.set(\"receiver_2\", \"Receiver_72\");",
 							"pm.collectionVariables.set(\"pid\", \"PIP_Samples_\"+pm.collectionVariables.get(\"scenario\"));"
 						]
 					}
