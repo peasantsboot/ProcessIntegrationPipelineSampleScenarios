@@ -12,6 +12,8 @@ We assume that you have gone through the prerequisites and the scenario setup. S
 ## Test the scenario
 To test the scenario, open your Postman client, and navigate to the folder **Scenario 7 - RL with non-XML payload --> Trigger sample messages** of the provided Postman collection **Pipeline Concept - Sample Scenarios**.
 
+<br>![](/images/13_01_Scenario7_Trigger.png)
+
 You can run any of the POST requests below the **Trigger sample messages** folder. The first two requests will exchange JSON messages from end to end, the last will send a CSV file to Cloud Integration which is then converted to XML in the outbound processing flow.
 
 In the message monitor of your SAP Integration Suite tenant, you can monitor the messages which were exchanged. In the Integration Suite launch page, navigate to **Monitor --> Integrations and APIs** and select the tile below **Monitor Message Processing**.
