@@ -8,6 +8,10 @@ are determined in a scenario-specific integration flow **PIPSamplesScenario4_Ste
 
 We assume that you have gone through the prerequisites and the scenario setup.
 
+## Partner Directory entries
+
+Recently, we have shipped a Partner Directory user interface in SAP Integration Suite that allows you to maintain the Partner Directory entries. After you have 
+
 ## Test the scenario
 To test the scenario, open your Postman client and navigate to the folder **Scenario 4 -  Custom Extension for Receiver Determination --> Trigger sample messages** of the provided Postman collection **Pipeline Concept - Sample Scenarios**.
 
