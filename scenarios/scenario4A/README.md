@@ -10,7 +10,13 @@ We assume that you have gone through the prerequisites and the scenario setup.
 
 ## Partner Directory entries
 
-Recently, we have shipped a Partner Directory user interface in SAP Integration Suite that allows you to maintain the Partner Directory entries. After you have 
+Open the Partner Directory user interface in SAP Integration Suite to check the Partner Directory entries by selecting the tile **Partner Directory** in the monitoring page.
+
+<br>![](/images/17_02_Scenario4A_PDTile.png)
+
+Select the partner ID **PIP_Samples_Scenario_4A**. On tab **String Parameters**, you can see that the string parameter **CustomXRDEndpoint** has the value of the ProcessDirect end point of the extension integration flow.
+
+<br>![](/images/17_03_Scenario4A_PDStringParameter.png)
 
 ## Test the scenario
 To test the scenario, open your Postman client and navigate to the folder **Scenario 4 -  Custom Extension for Receiver Determination --> Trigger sample messages** of the provided Postman collection **Pipeline Concept - Sample Scenarios**.
