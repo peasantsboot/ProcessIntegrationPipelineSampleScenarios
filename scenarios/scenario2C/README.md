@@ -25,4 +25,6 @@ You can run any of the POST requests below the **Trigger sample messages** folde
   - You should see a log for the integration flow **PIPSamplesScenario2_Step05_CustomInterfaceDetermination**.
   - Here, the message is not split, the receiver interface should be **PurchaseOrder.Create**.
 
+<br>![](/images/16_01_Scenario2C_MPL.png)
+
 Go back to [Main page](../../README.md)
