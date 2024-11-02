@@ -39,7 +39,7 @@ For the alternative partner and string parameters, we directly call the Partner 
 For the XSLTs, we pass the request to the helper integration flow **PIP_EncodeAndUpload_XSLT** which encodes the XSLT before uploading it to the Partner Directory.
 This way, you are able to see the xpath conditions of the XSLT mappings in the body of the requests.
 
-## Checking the Partner Directory entries
+## Checking the Partner Directory entries via API
 
 If you like to double check if the Partner Directory entries have been successfully created, you can run through the GET requests below the folder **Check Partner Directory entries**.
 
@@ -53,6 +53,14 @@ For the XSLTs, we pass the request to the helper integration flow **PIP_ReadAndD
 This way, you are able to see the xpath conditions of the XSLT mappings in the response of the request.
 
 <br>![](/images/06_06_ReadXSLT.png)
+
+## Checking the Partner Directory entries via UI
+
+Recently, we have shipped a Partner Directory user interface in SAP Integration Suite that allows you to maintain the Partner Directory entries. After you have run through the APIs to setup the Partner Directory entries, you can check in the UI if they have been successfully created.
+
+In the SAP Integration Suite launch page, navigate to Monitor Integrations and APIs, and select the tile **Partner Directory** below the **Manage Stores** section.
+
+If you have run through the setup for all scenarios, you should see a list of partner IDs corresponding to the scenario names.
 
 ## Optionally: Updating the Partner Directory entries
 
