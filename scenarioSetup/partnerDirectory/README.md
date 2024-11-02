@@ -56,11 +56,23 @@ This way, you are able to see the xpath conditions of the XSLT mappings in the r
 
 ## Checking the Partner Directory entries via UI
 
-Recently, we have shipped a Partner Directory user interface in SAP Integration Suite that allows you to maintain the Partner Directory entries. After you have run through the APIs to setup the Partner Directory entries, you can check in the UI if they have been successfully created.
+Recently, we have shipped a Partner Directory user interface in SAP Integration Suite that allows you to maintain the Partner Directory entries. After you have run through the APIs to setup the Partner Directory entries, you can check in the UI if the entries have been successfully created.
 
-In the SAP Integration Suite launch page, navigate to Monitor Integrations and APIs, and select the tile **Partner Directory** below the **Manage Stores** section.
+In the SAP Integration Suite launch page, navigate to **Monitor --> Integrations and APIs**, and select the tile **Partner Directory** below the **Manage Stores** section.
 
-If you have run through the setup for all scenarios, you should see a list of partner IDs corresponding to the scenario names.
+<br>![](/images/08_01_Scenario2_PDTile.png)
+
+If you have run through the setup for all scenarios, you should see a list of partner IDs corresponding to the scenario names. Select any partner ID, in our case we select **PIP_Samples_Scenario_2**. On the tab **String Parameters**, you should see an entry defining the maximum number of retries.
+
+<br>![](/images/08_03_Scenario2_PDStringParameter.png)
+
+Switch to tab **Binary Parameters**. Here, the XSLT entries for the receiver and the interface determinations are displayed.
+
+<br>![](/images/08_04_Scenario2_PDBinary.png)
+
+Switch to tab **Alternative Partners**. You can see that three senders are mapped to the scenario.
+
+<br>![](/images/08_02_Scenario2_PDAlternativePartner.png)
 
 ## Optionally: Updating the Partner Directory entries
 
