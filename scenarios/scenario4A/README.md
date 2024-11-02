@@ -18,6 +18,10 @@ Select the partner ID **PIP_Samples_Scenario_4A**. On tab **String Parameters**,
 
 <br>![](/images/17_03_Scenario4A_PDStringParameter.png)
 
+Switch to tab **Alternative Partners**. You can see that the sender **Sender_4A** is mapped to the scenario.
+
+<br>![](/images/17_04_Scenario4A_PDAlternativePartner.png)
+
 ## Test the scenario
 To test the scenario, open your Postman client and navigate to the folder **Scenario 4 -  Custom Extension for Receiver Determination --> Trigger sample messages** of the provided Postman collection **Pipeline Concept - Sample Scenarios**.
 
