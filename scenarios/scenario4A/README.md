@@ -6,6 +6,8 @@ are determined in a scenario-specific integration flow **PIPSamplesScenario4_Ste
 - We do not need to upload an XSLT to determine the receivers. Instead, we provide the information about the end point of the integration flow running a mapping to determine receivers and interfaces.
 - We can reuse the integration flows from scenario 4.
 
+<br>![](/images/Scenario_4A.png)
+
 We assume that you have gone through the prerequisites and the scenario setup.
 
 ## Partner Directory entries
