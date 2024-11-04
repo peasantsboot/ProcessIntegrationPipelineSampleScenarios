@@ -3,7 +3,12 @@
 Scenario 2A is similar like scenario 2 except that for one receiver the interface determination pipeline step is bypassed.
 - The scenario-specific integration flows of scenario 2 can be reused.
 - However for receiver 1, only one interface index is defined with no interface condition, so the interface can be maintained in the receiver determination XSLT which allows to bypass the interface determination pipeline step.
+
+<br>![](/images/Scenario_2A_Receiver21.png)
+
 - For receiver 2, an interface determination XSLT is still defined.
+
+<br>![](/images/Scenario_2A_Receiver22.png)
 
 **Note**: Scenario 2A reuses the same integration package like scenario 2. So, ensure that you have deployed the scenario 2 integration flows
 whereas for the Partner Directory dedicated objects for scenario 2A have to be setup.
