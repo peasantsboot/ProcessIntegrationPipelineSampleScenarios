@@ -2,6 +2,8 @@
 
 Scenario 3 uses the Maintain Order at Runtime feature. A message is sent to one receiver and split whereas the split messages should be kept in order.
 
+<br>![](/images/Scenario_3.png)
+
 ## Test the scenario
 To test the scenario, open your Postman client and navigate to the folder **Scenario 3 - IF Split with Order at Runtime --> Trigger sample messages** of the provided Postman collection **Pipeline Concept - Sample Scenarios**. Run the request.
 
