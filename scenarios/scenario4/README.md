@@ -6,6 +6,8 @@ For the interface determination however, the XSLTs are still needed.
 In this case, we do not need to upload an XSLT to determine the receivers. Instead, we provide the information about the end point of the integration flow running the mapping as well as the receiver
 not determined situations as string parameters uploaded to the Partner Directory.
 
+<br>![](/images/Scenario_4.png)
+
 We assume that you have gone through the prerequisites and the scenario setup.
 
 ## Test the scenario
