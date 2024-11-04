@@ -5,6 +5,9 @@ Scenario 2C is similar like scenario 2B except that for determining the interfac
 - The messages are sent to one single receiver only, so the receiver can be maintained as string parameter in the Partner Directory which allows to bypass the receiver determination pipeline step.
 - To determine the receiver interfaces, a custom extension is used instead of running an XSLT, i.e., we call the scenario-specific integration flow **PIPSamplesScenario2_Step05_CustomInterfaceDetermination** to determine the receiver interfaces.
 
+
+<br>![](/images/Scenario_2C.png)
+
 **Note**: Scenario 2C reuses the same integration package like scenario 2. In addition to scenario 2, we have added the integration flow **PIPSamplesScenario2_Step05_CustomInterfaceDetermination** to the package. So, ensure that you have deployed the scenario 2 integration flows
 whereas for the Partner Directory dedicated objects for scenario 2C have to be setup.
 
