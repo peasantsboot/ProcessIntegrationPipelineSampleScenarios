@@ -3,7 +3,7 @@
 Scenario 4A is similar to scenario 4, however in the current case we use a custom extension to determine the list of receivers instead of running an XSLT
 from the Partner Directory. Furthermore, since each receiver has one interface only, we can bypass the interface determination. So, the receivers and their interfaces
 are determined in a scenario-specific integration flow **PIPSamplesScenario4_Step04_CustomReceiverDetermination**.
-- We do not need to upload an XSLT to determine the receivers. Instead, we provide the information about the end point of the integration flow running a mapping to determine receivers adn interfaces.
+- We do not need to upload an XSLT to determine the receivers. Instead, we provide the information about the end point of the integration flow running a mapping to determine receivers and interfaces.
 - We can reuse the integration flows from scenario 4.
 
 We assume that you have gone through the prerequisites and the scenario setup.
