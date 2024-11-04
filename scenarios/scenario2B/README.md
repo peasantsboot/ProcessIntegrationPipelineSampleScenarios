@@ -5,6 +5,8 @@ Scenario 2B is similar like scenario 2 except that we only have one single recei
 - However, we stick to one receiver only, so the receiver can be maintained as string parameter in the Partner Directory which allows to bypass the receiver determination pipeline step.
 - For the receiver, interface determination XSLT is still defined.
 
+<br>![](/images/Scenario_2B.png)
+
 **Note**: Scenario 2B reuses the same integration package like scenario 2. So, ensure that you have deployed the scenario 2 integration flows
 whereas for the Partner Directory dedicated objects for scenario 2B have to be setup.
 
