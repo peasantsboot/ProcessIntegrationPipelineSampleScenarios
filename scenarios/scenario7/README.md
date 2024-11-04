@@ -5,6 +5,8 @@ Scenario 7 covers a Recipient List pattern with non-XML payload
 - The payload of the messages exchanged are either in JSON or CSV format and are not converted into XML during inbound processing.
 - Both the receiver determination and the interface determination are based on dynamic configuration headers passed to the generic integration flows.
 
+<br>![](/images/Scenario_7.png)
+
 **Note**: When running an XSLT mapping to determine the list of receivers or interfaces for non-XML messages, you usually run into an error even if the conditions are based on headers only because the XSLT expects an XML. To overcome the error, a dummy XML is created right before running the XSLT.
 
 We assume that you have gone through the prerequisites and the scenario setup. So, all should be set to be able to test the scenario.
