@@ -3062,7 +3062,7 @@
 							"response": []
 						},
 						{
-							"name": "Read Alternative Partners",
+							"name": "Read Alternative Partner S1",
 							"event": [
 								{
 									"listen": "test",
@@ -3096,7 +3096,7 @@
 									}
 								],
 								"url": {
-									"raw": "https://{{apihost}}/api/v1/AlternativePartners",
+									"raw": "https://{{apihost}}/api/v1/AlternativePartners?$filter=Agency eq '{{sender_1}}' and Scheme eq 'SenderInterface' and Id eq '{{interface}}'&$select=Pid",
 									"protocol": "https",
 									"host": [
 										"{{apihost}}"
@@ -3109,8 +3109,129 @@
 									"query": [
 										{
 											"key": "$filter",
-											"value": "Pid eq '{{pid}}'",
-											"disabled": true
+											"value": "Agency eq '{{sender_1}}' and Scheme eq 'SenderInterface' and Id eq '{{interface}}'"
+										},
+										{
+											"key": "$select",
+											"value": "Pid"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Read Alternative Partner S2",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{apiAccessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"type": "text",
+										"value": "application/xml"
+									}
+								],
+								"url": {
+									"raw": "https://{{apihost}}/api/v1/AlternativePartners?$filter=Agency eq '{{sender_2}}' and Scheme eq 'SenderInterface' and Id eq '{{interface}}'&$select=Pid",
+									"protocol": "https",
+									"host": [
+										"{{apihost}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"AlternativePartners"
+									],
+									"query": [
+										{
+											"key": "$filter",
+											"value": "Agency eq '{{sender_2}}' and Scheme eq 'SenderInterface' and Id eq '{{interface}}'"
+										},
+										{
+											"key": "$select",
+											"value": "Pid"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Read Alternative Partner S3",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{apiAccessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"type": "text",
+										"value": "application/xml"
+									}
+								],
+								"url": {
+									"raw": "https://{{apihost}}/api/v1/AlternativePartners?$filter=Agency eq '{{sender_3}}' and Scheme eq 'SenderInterface' and Id eq '{{interface}}'&$select=Pid",
+									"protocol": "https",
+									"host": [
+										"{{apihost}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"AlternativePartners"
+									],
+									"query": [
+										{
+											"key": "$filter",
+											"value": "Agency eq '{{sender_3}}' and Scheme eq 'SenderInterface' and Id eq '{{interface}}'"
+										},
+										{
+											"key": "$select",
+											"value": "Pid"
 										}
 									]
 								}
