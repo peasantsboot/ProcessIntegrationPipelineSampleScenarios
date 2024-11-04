@@ -2,6 +2,8 @@
 
 Scenario 6 simulates an IDoc inbound scenario. You can either run a single IDoc or a bulk IDoc. For bulk, the mocked IDoc sender simply duplicates the very same request message and creates an IDoc bulk message.
 
+<br>![](/images/Scenario_6.png)
+
 ## Test the scenario
 To test the scenario, open your Postman client and navigate to the folder **Scenario 6 - Point-to-Point with IDoc inbound --> Trigger sample messages** of the provided Postman collection **Pipeline Concept - Sample Scenarios**.
 
