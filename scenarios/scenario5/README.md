@@ -6,6 +6,8 @@ Instead of maintaining the receiver and interface determination as XSLTs, we now
 
 Furthermore, sender wildcard is supported. i.e., two alternative partners are mapped to the same partner ID.
 
+<br>![](/images/Scenario_5.png)
+
 We assume that you have gone through the prerequisites and the scenario setup.
 
 ## Test the scenario
