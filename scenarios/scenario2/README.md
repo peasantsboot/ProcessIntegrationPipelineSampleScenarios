@@ -5,6 +5,8 @@ With scenario 2, you can test the following features:
 - Messages are sent to the pipeline via the XI inbound processing. In this case, we do not need a scenario-specific inbound flow, instead the generic XI inbound flow is used.
 - Support for sender wildcards: Multiple senders are mapped to the same configuration.
 
+<br>![](/images/Scenario_2.png)
+
 We assume that you have gone through the prerequisites and the scenario setup.
 
 ## Test the scenario
