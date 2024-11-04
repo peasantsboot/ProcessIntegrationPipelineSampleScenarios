@@ -7,6 +7,8 @@ Scenario 1 covers the most generic use case:
 - For receiver **Receiver_12**, the interface determination is based on a dynamic configuration header passed to the generic integration flows.
 - Custom header properties are created that allows you to filter message processing logs based on payload data.
 
+<br>![](/images/Scenario_1.png)
+
 We assume that you have gone through the prerequisites and the scenario setup. So, all should be set to be able to test the scenario.
 
 ## Test the scenario
