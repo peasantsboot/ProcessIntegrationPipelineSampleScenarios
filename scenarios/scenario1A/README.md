@@ -11,7 +11,7 @@ This way, we can completly bypass the interface determination pipeline step lead
 <br>![](/images/Scenario_1A.png)
 
 **Note**: Scenario 1A reuses the same integration package like scenario 1.
-So, ensure that you have deployed the scenario 1 integration flows whereas for the Partner Directory dedicated objects for scenario 1A have to be setup.
+So, ensure that you have deployed the scenario 1 integration flows whereas for the Partner Directory you need to setup the dedicated objects for scenario 1A. See [Setup the Partner Directory entries](scenarioSetup/partnerDirectory).
 
 ## Test the scenario
 To test the scenario, open your Postman client, and navigate to the folder **Scenario 1A - Combined RL & IF Determination --> Trigger sample messages** of the provided Postman collection **Pipeline Concept - Sample Scenarios**.
