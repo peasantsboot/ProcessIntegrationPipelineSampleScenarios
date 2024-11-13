@@ -5,6 +5,8 @@ except that the receiver determination xpath conditions and the interface xpath 
 This way, we can completly bypass the interface determination pipeline step leading to a better runtime behavior in terms of performance.
 - The scenario-specific integration flows of scenario 1 can be reused.
 - However, the receiver determination XSLT has been enhanced to include the interface determination xpaths.
+- So, we can save one JMS queue.
+- Furthermore, we only need to read one XSLT from the Partner Directory instead of four like in scenario 1 (one for the receiver determination + one for each receiver for the interface determination).
 
 <br>![](/images/Scenario_1A.png)
 
