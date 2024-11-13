@@ -26,6 +26,6 @@ If you run through the provided requests, they should result into the following:
   - Two messages to **Receiver_13** one with receiver interface **PurchaseOrderItem.Create** and one with **PurchaseOrder.Create**. 
 - The other three requests will run into errors. The one where the test mode is set to true will not go into retry, it will be completed and the custom status is set to **ErrorInTestMode**.
 
-**Note**: Because we use exactly the same xpath conditions like in scenario 1, the results should be the same.
+**Note**: Because we use exactly the same xpath conditions like in scenario 1, the results should be the same except that you should not get any logs for step #5.
 
 Go back to [Main page](../../README.md)
