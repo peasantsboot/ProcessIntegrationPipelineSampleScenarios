@@ -28,6 +28,8 @@ For each sample scenario run through the following steps:
 - [Import and deploy the provided integration packages](scenarioSetup/import)
 - [Setup the Partner Directory entries](scenarioSetup/partnerDirectory)
 
+**Note**: From Pipeline package version 1.0.8 on, we have introduced scenario varaints labeled with an additional letter. Those scenario variants leverage new features that we have shipped with new versions. The scenario variants are differently configured in the Partner Directory, e.g., to bypass a pipeline step or using a custom extension, however they share the same integration packages.
+
 ## Sample Scenarios
 
 The following sample scenarios are covered:
@@ -38,3 +40,12 @@ The following sample scenarios are covered:
 - [Scenario 4: Use Extended Receiver Determination mapping instead of XSLT](scenarios/scenario4)
 - [Scenario 5: Point-to-Point (Bypass option)](scenarios/scenario5)
 - [Scenario 6: Point-to-Point with IDoc inbound](scenarios/scenario6)
+
+The following sample scenarios and variants are supported from version 1.0.8 on:
+
+- [Scenario 1A: Combined RL & IF Determination](scenarios/scenario1A)
+- [Scenario 2A: Bypass Interface Determination](scenarios/scenario2A)
+- [Scenario 2B: Bypass Receiver Determination](scenarios/scenario2B)
+- [Scenario 2C: Custom Extension for Interface Determination](scenarios/scenario2C)
+- [Scenario 4A: Custom Extension for Receiver Determination](scenarios/scenario4A)
+- [Scenario 7: RL with non-XML payload](scenarios/scenario7)
