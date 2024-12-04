@@ -43,9 +43,9 @@ The following sample scenarios are covered:
 
 The following sample scenarios and variants are supported from version 1.0.8 on:
 
-- [Scenario 1A: Combined RL & IF Determination](scenarios/scenario1A)
+- [Scenario 1A: Combined Recipient List & Interface Determination](scenarios/scenario1A)
 - [Scenario 2A: Bypass Interface Determination](scenarios/scenario2A)
 - [Scenario 2B: Bypass Receiver Determination](scenarios/scenario2B)
 - [Scenario 2C: Custom Extension for Interface Determination](scenarios/scenario2C)
 - [Scenario 4A: Custom Extension for Receiver Determination](scenarios/scenario4A)
-- [Scenario 7: RL with non-XML payload](scenarios/scenario7)
+- [Scenario 7: Recipient List with non-XML payload](scenarios/scenario7)
