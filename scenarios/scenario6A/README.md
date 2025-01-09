@@ -11,17 +11,19 @@ The integrated messaging runtime combines inbound conversion as well as receiver
 
 **Note**: Scenario 6A reuses the same integration package like scenario 6. So, ensure that you have deployed the scenario 6 integration flows whereas for the Partner Directory dedicated objects for scenario 6A have to be setup.
 
+**Note**: We assume that you run the scenario on your quality assurance landscape with stage key **QA**. During runtime the sender names are mapped to their alias and vice versa. The alias name is actually used across all tenant stages to identify the integration scenario stored in the Partner Directory. Ensure, that the landscape has been setup in the Partner Directory mapping the stages like **DEV**, **QA**, and **PRD** to the tenant names.
+
 ## Test the scenario
 To test the scenario, open your Postman client and navigate to the folder **Scenario 6A - P2P with Integrated Messaging Runtime --> Trigger sample messages** of the provided Postman collection **Pipeline Concept - Sample Scenarios**.
 
 In the message monitor of your SAP Integration Suite tenant, you can monitor the messages which were exchanged.
 
 You can run any of the POST requests below the **Trigger sample messages** folder:
-- If you run the single IDoc request, you should see one single IDoc ID passed back in the response. A message of message type **FLIGHTBOOKING/CREATEFROMDAT.FLIGHTBOOKING/CREATEFROMDAT01** should be sent from sender **BS_A6A_P** to receiver **BS_ERP6A_P**.
-- If you run the bulk IDoc request, you should see two IDoc IDs passed back in the response. The bulk message is split and two messages of message type **FLIGHTBOOKING/CREATEFROMDAT.FLIGHTBOOKING/CREATEFROMDAT01** should be sent to **BS_ERP6A_P**.
+- If you run the single IDoc request, you should see one single IDoc ID passed back in the response. A message of message type **FLIGHTBOOKING/CREATEFROMDAT.FLIGHTBOOKING/CREATEFROMDAT01** should be sent from sender **BS_A6A_Q** to receiver **BS_ERP6A_Q**.
+- If you run the bulk IDoc request, you should see two IDoc IDs passed back in the response. The bulk message is split and two messages of message type **FLIGHTBOOKING/CREATEFROMDAT.FLIGHTBOOKING/CREATEFROMDAT01** should be sent to **BS_ERP6A_Q**.
 
-**Note**: We assume that you run the scenario on your production landscape. Actually, during runtime the logical system **A6PCLNT602** is mapped to an alias **BS_A6A** which is used across all tenant stages to identify the integration scenario stored in the Partner Directory.
-Using the very same alias, the business name of the sending system **BS_A6A_P** is also fetched and used for monitoring purposes. Afer having determined the receiver alias **BS_ERP6A**, it is then mapped to the actual receiver **BS_ERP6A_P**.
+**Note**: Actually, during runtime the logical system **A6QCLNT602** is mapped to an alias **BS_A6A** which is used across all tenant stages to identify the integration scenario stored in the Partner Directory.
+Using the very same alias, the business name of the sending system **BS_A6A_Q** is also fetched and used for monitoring purposes. Afer having determined the receiver alias **BS_ERP6A**, it is then mapped to the actual receiver **BS_ERP6A_Q**.
 
 In any case, in the message monitoring you should see amongst other logs also a log of the generic integration flow **Pipeline Generic Step02 - Integrated Messaging Runtime Async**.
 
