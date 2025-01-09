@@ -20,18 +20,18 @@ In the message monitor of your SAP Integration Suite tenant, you can monitor the
 
 You can run any of the GET requests below the **Trigger sample messages** folder:
 - The first request with airline ID **LH** should run successfully from sender **BS_AG9_Q** to receiver **BS_AL91_Q**:
-  - The response should indicate that the flight is fully booked.
+  - The response in the test client should indicate that the flight is fully booked.
   - You should see 3 new logs.
   - You should see a log for the integrated messaging runtime pipeline step.
 
 <br>![](/images/21_01_Scenario9_MPL.png)
 
 - The second request with airline ID **SQ** should run successfully from sender **BS_AG9_Q** to receiver **BS_AL92_Q**:
-  - The response should indicate that seats are available.
+  - The response in the test client should indicate that seats are available.
   - You should see 3 new logs.
   - You should see a log for the integrated messaging runtime pipeline step.
 - The third request with airline ID **LH** should run into an error:
-  - The response should indicate that the flight class doesn not exist.
+  - The response in the test client should indicate that the flight class doesn not exist.
   - You should see 3 new logs whereas two are in failed status.
   - You should see a log for the integrated messaging runtime pipeline step.
 
