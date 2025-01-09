@@ -21561,7 +21561,7 @@
 								"header": [
 									{
 										"key": "Content-Type",
-										"value": "application/xml",
+										"value": "application/json",
 										"type": "text"
 									},
 									{
@@ -21629,7 +21629,7 @@
 								"header": [
 									{
 										"key": "Content-Type",
-										"value": "application/xml",
+										"value": "application/json",
 										"type": "text"
 									},
 									{
@@ -21697,7 +21697,7 @@
 								"header": [
 									{
 										"key": "Content-Type",
-										"value": "application/xml",
+										"value": "application/json",
 										"type": "text"
 									},
 									{
