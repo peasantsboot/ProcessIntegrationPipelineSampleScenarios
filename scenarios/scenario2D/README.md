@@ -23,21 +23,19 @@ In the message monitor of your SAP Integration Suite tenant, you can monitor the
 
 You can run any of the POST requests below the **Trigger sample messages** folder:
 - The first request with supplier **ABCD** and country **DE** should run successfully from sender **BS_DD1_Q** to receiver **BS_ERP21_Q**:
-  - You should see 8 new logs.
-  - You should not see any log for pipeline step 5, this step has been bypassed, step 4 directly writes into the outbound processing queue.
-  - The message is split into three messages of interface **PurchaseOrderItem.Create** each containing an item.
-- The second request with supplier **XXXX** should run successfully from sender **Sender_2A** to the default receiver **Receiver_21**:
-  - You should see 8 new logs.
-  - You should not see any log for pipeline step 5, this step has been bypassed, pipeline step 4 directly writes into the outbound processing queue.
-  - The custom status of pipeline step 4 should be **ReceiverNotFoundDefault**.
-  - The message is split into three messages of interface **PurchaseOrderItem.Create** each containing an item.
-- The third request with supplier **EFGH** and country **DE** should run successfully from sender **Sender_2A** to **Receiver_22**:
-  - You should see 10 new logs.
-  - This time, pipeline step 5 hasn't been bypassed.
-  - The message is split into four messages, three messages of interface **PurchaseOrderItem.Create** and one of interface **PurchaseOrderHeader.Create**.
-- The fourth request with supplier **EFGH** and country **US** should run successfully from sender **Sender_2A** to **Receiver_22**:
   - You should see 7 new logs.
-  - This time, pipeline step 5 hasn't been bypassed.
-  - Here, the message is not split.
+  - You should see a log for the integrated messaging runtime pipeline step.
+  - The message is split into two messages of interface **PurchaseOrderItem.Create** each containing an item.
+
+<br>![](/images/18_01_Scenario2D_MPL.png)
+
+- The second request with supplier **EFGH** and country **DE** should run successfully from sender **BS_DD2_Q** to **BS_ERP22_Q**:
+  - You should see 8 new logs.
+  - You should see a log for the integrated messaging runtime pipeline step.
+  - The message is split into three messages, two messages of interface **PurchaseOrderItem.Create** and one of interface **PurchaseOrderHeader.Create**.
+- The third request with supplier **XXXX** and country **US** should run successfully from sender **BS_DD2_Q** to the default receiver **BS_ERP21_Q**:
+  - You should see 6 new logs.
+  - You should see a log for the integrated messaging runtime pipeline step.
+  - The custom status of the integrated messaging runtime pipeline should be **ReceiverNotFoundDefault**.
 
 Go back to [Main page](../../README.md)
