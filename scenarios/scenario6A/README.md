@@ -23,7 +23,7 @@ You can run any of the POST requests below the **Trigger sample messages** folde
 **Note**: We assume that you run the scenario on your production landscape. Actually, during runtime the logical system **A6PCLNT602** is mapped to an alias **BS_A6A** which is used across all tenant stages to identify the integration scenario stored in the Partner Directory.
 Using the very same alias, the business name of the sending system **BS_A6A_P** is also fetched and used for monitoring purposes. Afer having determined the receiver alias **BS_ERP6A**, it is then mapped to the actual receiver **BS_ERP6A_P**.
 
-In any case, in the monitoring you should see a log of the generic integration flow **Pipeline Generic Step02 - Integrated Messaging Runtime Async**
+In any case, in the message monitoring you should see amongst other log also a log of the generic integration flow **Pipeline Generic Step02 - Integrated Messaging Runtime Async**.
 
 <br>![](/images/19_01_Scenario6A_MPL.png)
 
