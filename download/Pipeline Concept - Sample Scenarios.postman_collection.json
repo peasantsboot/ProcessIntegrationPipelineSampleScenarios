@@ -106,7 +106,7 @@
 							"response": []
 						},
 						{
-							"name": "Map PRD to Landscape",
+							"name": "Map QA to Landscape",
 							"event": [
 								{
 									"listen": "test",
@@ -141,7 +141,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n\t\"Pid\": \"SAP_Integration_Suite_Landscape\",\r\n\t\"Id\": \"{{tenantName}}\",\r\n\t\"Value\": \"PRD\"\r\n}",
+									"raw": "{\r\n\t\"Pid\": \"SAP_Integration_Suite_Landscape\",\r\n\t\"Id\": \"{{tenantName}}\",\r\n\t\"Value\": \"QA\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -10330,7 +10330,7 @@
 					"name": "Trigger sample messages",
 					"item": [
 						{
-							"name": "Send Order ABCD DE - XI Sender S1 PRD Successful",
+							"name": "Send Order ABCD DE - XI Sender S1 QA Successful",
 							"event": [
 								{
 									"listen": "test",
@@ -10354,7 +10354,7 @@
 									},
 									{
 										"key": "sender",
-										"value": "{{sender_p_1}}",
+										"value": "{{sender_q_1}}",
 										"type": "text"
 									},
 									{
@@ -10376,213 +10376,6 @@
 								"body": {
 									"mode": "raw",
 									"raw": "<?xml version='1.0' encoding='UTF-8'?>\r\n<ns0:Order xmlns:ns0=\"http://demo.sap.com/eip/recipient-list\" PurchaseOrderNumber=\"2D8002\" OrderDate=\"2019-05-06\">\r\n    <Supplier>ABCD</Supplier>\r\n    <Country>DE</Country>\r\n    <Item ItemNumber=\"10\" PurchaseOrderNumber=\"\" OrderDate=\"\">\r\n        <ProductId>HT-1001</ProductId>\r\n        <ProductName>Word</ProductName>\r\n        <Category>Software</Category>\r\n        <Quantity>10</Quantity>\r\n        <CurrencyCode>EUR</CurrencyCode>\r\n        <Price>799.00</Price>\r\n    </Item>\r\n    <Item ItemNumber=\"20\" PurchaseOrderNumber=\"\" OrderDate=\"\">\r\n        <ProductId>HT-1002</ProductId>\r\n        <ProductName>Excel</ProductName>\r\n        <Category>Software</Category>\r\n        <Quantity>4</Quantity>\r\n        <CurrencyCode>EUR</CurrencyCode>\r\n        <Price>100.00</Price>\r\n    </Item>\r\n    <Item ItemNumber=\"30\" PurchaseOrderNumber=\"\" OrderDate=\"\">\r\n            <ProductId>HT-1003</ProductId>\r\n            <ProductName>Lenovo</ProductName>\r\n            <Category>Notebooks</Category>\r\n            <Quantity>2</Quantity>\r\n            <CurrencyCode>EUR</CurrencyCode>\r\n            <Price>899.00</Price>\r\n    </Item>\r\n</ns0:Order>",
-									"options": {
-										"raw": {
-											"language": "xml"
-										}
-									}
-								},
-								"url": {
-									"raw": "https://{{host}}/http/PIP/Samples/MockedXISender",
-									"protocol": "https",
-									"host": [
-										"{{host}}"
-									],
-									"path": [
-										"http",
-										"PIP",
-										"Samples",
-										"MockedXISender"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Send Order EFGH DE - XI Sender S2 PRD Successful",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"pm.test(\"Status code is 200\", function () {\r",
-											"    pm.response.to.have.status(200);\r",
-											"});"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Content-Type",
-										"value": "application/xml",
-										"type": "text"
-									},
-									{
-										"key": "sender",
-										"value": "{{sender_p_2}}",
-										"type": "text"
-									},
-									{
-										"key": "interface",
-										"value": "{{interface}}",
-										"type": "text"
-									},
-									{
-										"key": "namespace",
-										"value": "{{namespace}}",
-										"type": "text"
-									},
-									{
-										"key": "host",
-										"value": "{{host}}",
-										"type": "text"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "<?xml version='1.0' encoding='UTF-8'?>\r\n<ns0:Order xmlns:ns0=\"http://demo.sap.com/eip/recipient-list\" PurchaseOrderNumber=\"2D8002\" OrderDate=\"2019-05-06\">\r\n    <Supplier>EFGH</Supplier>\r\n    <Country>DE</Country>\r\n    <Item ItemNumber=\"10\" PurchaseOrderNumber=\"\" OrderDate=\"\">\r\n        <ProductId>HT-1001</ProductId>\r\n        <ProductName>Word</ProductName>\r\n        <Category>Software</Category>\r\n        <Quantity>10</Quantity>\r\n        <CurrencyCode>EUR</CurrencyCode>\r\n        <Price>799.00</Price>\r\n    </Item>\r\n    <Item ItemNumber=\"20\" PurchaseOrderNumber=\"\" OrderDate=\"\">\r\n        <ProductId>HT-1002</ProductId>\r\n        <ProductName>Excel</ProductName>\r\n        <Category>Software</Category>\r\n        <Quantity>4</Quantity>\r\n        <CurrencyCode>EUR</CurrencyCode>\r\n        <Price>100.00</Price>\r\n    </Item>\r\n    <Item ItemNumber=\"30\" PurchaseOrderNumber=\"\" OrderDate=\"\">\r\n            <ProductId>HT-1003</ProductId>\r\n            <ProductName>Lenovo</ProductName>\r\n            <Category>Notebooks</Category>\r\n            <Quantity>2</Quantity>\r\n            <CurrencyCode>EUR</CurrencyCode>\r\n            <Price>899.00</Price>\r\n    </Item>\r\n</ns0:Order>",
-									"options": {
-										"raw": {
-											"language": "xml"
-										}
-									}
-								},
-								"url": {
-									"raw": "https://{{host}}/http/PIP/Samples/MockedXISender",
-									"protocol": "https",
-									"host": [
-										"{{host}}"
-									],
-									"path": [
-										"http",
-										"PIP",
-										"Samples",
-										"MockedXISender"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Send Order XXXX US - XI Sender S2 PRD Successful",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"pm.test(\"Status code is 200\", function () {\r",
-											"    pm.response.to.have.status(200);\r",
-											"});"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Content-Type",
-										"value": "application/xml",
-										"type": "text"
-									},
-									{
-										"key": "sender",
-										"value": "{{sender_p_2}}",
-										"type": "text"
-									},
-									{
-										"key": "interface",
-										"value": "{{interface}}",
-										"type": "text"
-									},
-									{
-										"key": "namespace",
-										"value": "{{namespace}}",
-										"type": "text"
-									},
-									{
-										"key": "host",
-										"value": "{{host}}",
-										"type": "text"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "<?xml version='1.0' encoding='UTF-8'?>\r\n<ns0:Order xmlns:ns0=\"http://demo.sap.com/eip/recipient-list\" PurchaseOrderNumber=\"2D8003\" OrderDate=\"2019-05-06\">\r\n    <Supplier>XXXX</Supplier>\r\n    <Country>US</Country>\r\n    <Item ItemNumber=\"10\" PurchaseOrderNumber=\"\" OrderDate=\"\">\r\n        <ProductId>HT-1001</ProductId>\r\n        <ProductName>Word</ProductName>\r\n        <Category>Software</Category>\r\n        <Quantity>10</Quantity>\r\n        <CurrencyCode>EUR</CurrencyCode>\r\n        <Price>799.00</Price>\r\n    </Item>\r\n    <Item ItemNumber=\"20\" PurchaseOrderNumber=\"\" OrderDate=\"\">\r\n        <ProductId>HT-1002</ProductId>\r\n        <ProductName>Software</ProductName>\r\n        <Category>Excel</Category>\r\n        <Quantity>4</Quantity>\r\n        <CurrencyCode>EUR</CurrencyCode>\r\n        <Price>100.00</Price>\r\n    </Item>\r\n    <Item ItemNumber=\"30\" PurchaseOrderNumber=\"\" OrderDate=\"\">\r\n            <ProductId>HT-1003</ProductId>\r\n            <ProductName>Lenovo</ProductName>\r\n            <Category>Notebooks</Category>\r\n            <Quantity>2</Quantity>\r\n            <CurrencyCode>EUR</CurrencyCode>\r\n            <Price>899.00</Price>\r\n    </Item>\r\n</ns0:Order>",
-									"options": {
-										"raw": {
-											"language": "xml"
-										}
-									}
-								},
-								"url": {
-									"raw": "https://{{host}}/http/PIP/Samples/MockedXISender",
-									"protocol": "https",
-									"host": [
-										"{{host}}"
-									],
-									"path": [
-										"http",
-										"PIP",
-										"Samples",
-										"MockedXISender"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Send Order ABCD DE - XI Sender S1 DEV Successful",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"pm.test(\"Status code is 200\", function () {\r",
-											"    pm.response.to.have.status(200);\r",
-											"});"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Content-Type",
-										"value": "application/xml",
-										"type": "text"
-									},
-									{
-										"key": "sender",
-										"value": "{{sender_d_1}}",
-										"type": "text"
-									},
-									{
-										"key": "interface",
-										"value": "{{interface}}",
-										"type": "text"
-									},
-									{
-										"key": "namespace",
-										"value": "{{namespace}}",
-										"type": "text"
-									},
-									{
-										"key": "host",
-										"value": "{{host}}",
-										"type": "text"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "<?xml version='1.0' encoding='UTF-8'?>\r\n<ns0:Order xmlns:ns0=\"http://demo.sap.com/eip/recipient-list\" PurchaseOrderNumber=\"2D8001\" OrderDate=\"2019-05-06\">\r\n    <Supplier>ABCD</Supplier>\r\n    <Country>DE</Country>\r\n    <Item ItemNumber=\"10\" PurchaseOrderNumber=\"\" OrderDate=\"\">\r\n        <ProductId>HT-1001</ProductId>\r\n        <ProductName>Word</ProductName>\r\n        <Category>Software</Category>\r\n        <Quantity>10</Quantity>\r\n        <CurrencyCode>EUR</CurrencyCode>\r\n        <Price>799.00</Price>\r\n    </Item>\r\n    <Item ItemNumber=\"20\" PurchaseOrderNumber=\"\" OrderDate=\"\">\r\n        <ProductId>HT-1002</ProductId>\r\n        <ProductName>Excel</ProductName>\r\n        <Category>Software</Category>\r\n        <Quantity>4</Quantity>\r\n        <CurrencyCode>EUR</CurrencyCode>\r\n        <Price>100.00</Price>\r\n    </Item>\r\n    <Item ItemNumber=\"30\" PurchaseOrderNumber=\"\" OrderDate=\"\">\r\n            <ProductId>HT-1003</ProductId>\r\n            <ProductName>Lenovo</ProductName>\r\n            <Category>Notebooks</Category>\r\n            <Quantity>2</Quantity>\r\n            <CurrencyCode>EUR</CurrencyCode>\r\n            <Price>899.00</Price>\r\n    </Item>\r\n</ns0:Order>",
 									"options": {
 										"raw": {
 											"language": "xml"
@@ -10652,6 +10445,75 @@
 								"body": {
 									"mode": "raw",
 									"raw": "<?xml version='1.0' encoding='UTF-8'?>\r\n<ns0:Order xmlns:ns0=\"http://demo.sap.com/eip/recipient-list\" PurchaseOrderNumber=\"2D8002\" OrderDate=\"2019-05-06\">\r\n    <Supplier>EFGH</Supplier>\r\n    <Country>DE</Country>\r\n    <Item ItemNumber=\"10\" PurchaseOrderNumber=\"\" OrderDate=\"\">\r\n        <ProductId>HT-1001</ProductId>\r\n        <ProductName>Word</ProductName>\r\n        <Category>Software</Category>\r\n        <Quantity>10</Quantity>\r\n        <CurrencyCode>EUR</CurrencyCode>\r\n        <Price>799.00</Price>\r\n    </Item>\r\n    <Item ItemNumber=\"20\" PurchaseOrderNumber=\"\" OrderDate=\"\">\r\n        <ProductId>HT-1002</ProductId>\r\n        <ProductName>Excel</ProductName>\r\n        <Category>Software</Category>\r\n        <Quantity>4</Quantity>\r\n        <CurrencyCode>EUR</CurrencyCode>\r\n        <Price>100.00</Price>\r\n    </Item>\r\n    <Item ItemNumber=\"30\" PurchaseOrderNumber=\"\" OrderDate=\"\">\r\n            <ProductId>HT-1003</ProductId>\r\n            <ProductName>Lenovo</ProductName>\r\n            <Category>Notebooks</Category>\r\n            <Quantity>2</Quantity>\r\n            <CurrencyCode>EUR</CurrencyCode>\r\n            <Price>899.00</Price>\r\n    </Item>\r\n</ns0:Order>",
+									"options": {
+										"raw": {
+											"language": "xml"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{host}}/http/PIP/Samples/MockedXISender",
+									"protocol": "https",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"http",
+										"PIP",
+										"Samples",
+										"MockedXISender"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Send Order XXXX US - XI Sender S2 QA Successful",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/xml",
+										"type": "text"
+									},
+									{
+										"key": "sender",
+										"value": "{{sender_q_2}}",
+										"type": "text"
+									},
+									{
+										"key": "interface",
+										"value": "{{interface}}",
+										"type": "text"
+									},
+									{
+										"key": "namespace",
+										"value": "{{namespace}}",
+										"type": "text"
+									},
+									{
+										"key": "host",
+										"value": "{{host}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "<?xml version='1.0' encoding='UTF-8'?>\r\n<ns0:Order xmlns:ns0=\"http://demo.sap.com/eip/recipient-list\" PurchaseOrderNumber=\"2D8003\" OrderDate=\"2019-05-06\">\r\n    <Supplier>XXXX</Supplier>\r\n    <Country>US</Country>\r\n    <Item ItemNumber=\"10\" PurchaseOrderNumber=\"\" OrderDate=\"\">\r\n        <ProductId>HT-1001</ProductId>\r\n        <ProductName>Word</ProductName>\r\n        <Category>Software</Category>\r\n        <Quantity>10</Quantity>\r\n        <CurrencyCode>EUR</CurrencyCode>\r\n        <Price>799.00</Price>\r\n    </Item>\r\n    <Item ItemNumber=\"20\" PurchaseOrderNumber=\"\" OrderDate=\"\">\r\n        <ProductId>HT-1002</ProductId>\r\n        <ProductName>Software</ProductName>\r\n        <Category>Excel</Category>\r\n        <Quantity>4</Quantity>\r\n        <CurrencyCode>EUR</CurrencyCode>\r\n        <Price>100.00</Price>\r\n    </Item>\r\n    <Item ItemNumber=\"30\" PurchaseOrderNumber=\"\" OrderDate=\"\">\r\n            <ProductId>HT-1003</ProductId>\r\n            <ProductName>Lenovo</ProductName>\r\n            <Category>Notebooks</Category>\r\n            <Quantity>2</Quantity>\r\n            <CurrencyCode>EUR</CurrencyCode>\r\n            <Price>899.00</Price>\r\n    </Item>\r\n</ns0:Order>",
 									"options": {
 										"raw": {
 											"language": "xml"
@@ -18029,7 +17891,7 @@
 									},
 									{
 										"key": "sender",
-										"value": "{{sender_l_p}}",
+										"value": "{{sender_l_q}}",
 										"type": "text"
 									},
 									{
@@ -18094,7 +17956,7 @@
 									},
 									{
 										"key": "sender",
-										"value": "{{sender_l_p}}",
+										"value": "{{sender_l_q}}",
 										"type": "text"
 									},
 									{
@@ -20265,7 +20127,7 @@
 									},
 									{
 										"key": "sender",
-										"value": "{{sender_p}}",
+										"value": "{{sender_q}}",
 										"type": "text"
 									},
 									{
@@ -21566,7 +21428,7 @@
 									},
 									{
 										"key": "SAP_Sender",
-										"value": "{{sender_p}}",
+										"value": "{{sender_q}}",
 										"type": "text"
 									},
 									{
@@ -21634,7 +21496,7 @@
 									},
 									{
 										"key": "SAP_Sender",
-										"value": "{{sender_p}}",
+										"value": "{{sender_q}}",
 										"type": "text"
 									},
 									{
@@ -21702,7 +21564,7 @@
 									},
 									{
 										"key": "SAP_Sender",
-										"value": "{{sender_p}}",
+										"value": "{{sender_q}}",
 										"type": "text"
 									},
 									{
