@@ -28,7 +28,7 @@ For each sample scenario run through the following steps:
 - [Import and deploy the provided integration packages](scenarioSetup/import)
 - [Setup the Partner Directory entries](scenarioSetup/partnerDirectory)
 
-**Note**: From Pipeline package version 1.0.8 on, we have introduced scenario varaints labeled with an additional letter. Those scenario variants leverage new features that we have shipped with new versions. The scenario variants are differently configured in the Partner Directory, e.g., to bypass a pipeline step or using a custom extension, however they share the same integration packages.
+**Note**: From Pipeline package **version 1.0.8** on, we have introduced scenario varaints labeled with an additional letter. Those scenario variants leverage new features that we have shipped with new versions. The scenario variants are differently configured in the Partner Directory, e.g., to bypass a pipeline step or using a custom extension, however they share the same integration packages.
 
 ## Sample Scenarios
 
