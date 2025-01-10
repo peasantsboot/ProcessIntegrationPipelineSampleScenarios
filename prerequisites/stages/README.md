@@ -21,7 +21,7 @@ Open the folder **Setup Partner Directory entries**, and then select **Run**.
 
 <br>![](/images/06a_01_SetupPD.png)
 
-In the **Runner** tab, run the GET request to fetch the token and all POST requests in the given order.
+In the **Runner** tab, run the GET requests to fetch the tenant name and the token and the POST request in the given order.
 
 <br>![](/images/06a_02_Runner.png)
 
