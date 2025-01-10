@@ -11,6 +11,7 @@ When opening the package, you will find the following integration flows:
 - **PIP_Mocked_XI_Sender**: Acts as mocked sender system for XI inbound scenarios
 - **PIP_ReadAndDecode_XSLT**: Reads and decodes XSLT mappings from the Partner Directory
 - **PIP_Custom_ErrorHandling**: Optional custom error handling flow
+- **PIP_FetchTenantDetails**: Reads tenant details such as tenant name which is needed for the landscape stage support (supported from package version 1.0.9 on)
 
 As a prerequisite for deploying the **PIP_Mocked_XI_Sender** flow, you should have created the credential alias pointing to your own tenant runtime. Configure the Credential Name. The default value is **OWN**.
 
