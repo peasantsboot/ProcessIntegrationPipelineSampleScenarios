@@ -335,7 +335,7 @@
 							"response": []
 						},
 						{
-							"name": "Read Landscape Mapping",
+							"name": "Delete Landscape Mapping",
 							"event": [
 								{
 									"listen": "test",
