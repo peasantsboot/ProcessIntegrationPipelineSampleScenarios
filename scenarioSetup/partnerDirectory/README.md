@@ -62,6 +62,8 @@ In the SAP Integration Suite launch page, navigate to **Monitor --> Integrations
 
 <br>![](/images/08_01_Scenario2_PDTile.png)
 
+### Sample scenario using multiple pipeline steps
+
 If you have run through the setup for all scenarios, you should see a list of partner IDs corresponding to the scenario names. Select any partner ID, in our case we select **PIP_Samples_Scenario_2**. On the tab **String Parameters**, you should see an entry defining the maximum number of retries.
 
 <br>![](/images/08_03_Scenario2_PDStringParameter.png)
@@ -73,6 +75,29 @@ Switch to tab **Binary Parameters**. Here, the XSLT entries for the receiver and
 Switch to tab **Alternative Partners**. You can see that three senders are mapped to the scenario.
 
 <br>![](/images/08_02_Scenario2_PDAlternativePartner.png)
+
+### Sample scenario using integrated pipeline and stages
+
+As of pipeline package **version 1.0.9**, an integrated pipeline has been supported which runs the inbound conversion as well as the combined receiver and interface determination in one single integration flow. Furthermore, stages have been introduced. So, let's take a look on a scenario which leverages the new features.
+
+Select partner ID **PIP_Samples_Scenario_2D**. On the tab **String Parameters**, you should see three entries:
+- The parameter **MaxJMSRetries** defining the maximum number of retries.
+- The parameter **InboundConversionEndpoint** defining the ProcessDirect endpoint of the integration flow running the inbound conversion.
+- The parameter **InboundQueue** defining the inbound queue **PIPX01** of the integrated messaging runtime overruling the default in bound queue.
+
+<br>![](/images/08_05_Scenario2D_PDStringParameter.png)
+
+Switch to tab **Binary Parameters**. Here, you should see one XSLT entry only for the combined receiver and the interface determinations.
+
+<br>![](/images/08_06_Scenario2D_PDBinary.png)
+
+Switch to tab **Alternative Partners**. You can see that two senders **BS_DD1** and **BS_DD2** are mapped to the scenario. Those are actually alias names.
+
+<br>![](/images/08_07_Scenario2D_PDAlternativePartner.png)
+
+Let's check out how the business system needs to be defined to suppport the different stages. Select partner ID **BS_DD1**. On the tab **Alternative Partners**, you should see three entries, one for each stage. THe agency holds the stage ID, the scheme is fixed **BusinessSystemName**, and the ID points to the actual business name.
+
+<br>![](/images/08_08_Scenario2D_SenderSystem.png)
 
 ## Optionally: Updating the Partner Directory entries
 
