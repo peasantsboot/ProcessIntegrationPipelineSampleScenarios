@@ -24,7 +24,7 @@ From version 1.0.6 on we had to do an incompatible change of the partner ID for 
 Furthermore, we introduced the option of using alternative partner which maps sender component and sender interface to a scenario name. We recommend to apply the alternative partner and hence have used this feature for all of our sample scenarios.
 - Scenario 1 requires at least **version 1.0.7**. It uses a new feature that allows to pass dynamic configuration parameters as headers to the generic integration flows. You can then use those headers in the routing and interface conditions XSLTs. In scenario 1, the interface determination for receiver 2 actually uses a header to determine the receiver interface. Furthermore, from version 1.0.7 on we support custom header properties which allows you to search message processing logs in the message monitor based on payload data. Scenarios 1, 3, 4, and 5 leverage this new feature. You can run those scenarios also with the previous package version however in this case no custom header properties are added to the message processing log.
 - The following scenarios need at least **version 1.0.8**: 1A, 2A, 2B, 2C, 4A, and 7.
-- The following scenrios need at least **version 1.0.9**: 2D, 6A, 8, and 9.
+- The following scenarios need at least **version 1.0.9**: 2D, 6A, 8, and 9.
 
 ## Deploy script collection
 
