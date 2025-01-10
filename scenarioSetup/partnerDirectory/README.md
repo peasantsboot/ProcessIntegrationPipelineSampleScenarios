@@ -78,16 +78,16 @@ Switch to tab **Alternative Partners**. You can see that three senders are mappe
 
 ### Sample scenario using integrated pipeline and stages
 
-As of pipeline package **version 1.0.9**, an integrated pipeline has been supported which runs the inbound conversion as well as the combined receiver and interface determination in one single integration flow. Furthermore, stages have been introduced. So, let's take a look on a scenario which leverages the new features.
+As of pipeline package **version 1.0.9**, an integrated pipeline has been supported which runs the inbound conversion as well as the combined receiver and interface determination in one single integration flow. Furthermore, stages have been introduced. So, let's take a look at a scenario which leverages the new features.
 
 Select partner ID **PIP_Samples_Scenario_2D**. On the tab **String Parameters**, you should see three entries:
 - The parameter **MaxJMSRetries** defining the maximum number of retries.
 - The parameter **InboundConversionEndpoint** defining the ProcessDirect endpoint of the integration flow running the inbound conversion.
-- The parameter **InboundQueue** defining the inbound queue **PIPX01** of the integrated messaging runtime overruling the default in bound queue.
+- The parameter **InboundQueue** defining the inbound queue **PIPX01** of the integrated messaging runtime overruling the default inbound queue.
 
 <br>![](/images/08_05_Scenario2D_PDStringParameter.png)
 
-Switch to tab **Binary Parameters**. Here, you should see one XSLT entry only for the combined receiver and the interface determinations.
+Switch to tab **Binary Parameters**. Here, you should see one XSLT entry only for the combined receiver and interface determination.
 
 <br>![](/images/08_06_Scenario2D_PDBinary.png)
 
