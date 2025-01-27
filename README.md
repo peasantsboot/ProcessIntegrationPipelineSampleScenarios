@@ -20,6 +20,7 @@ Before you start, run through the following steps to get prepared:
 - [Copy and deploy the standard package](prerequisites/standard)
 - [Create credential alias on your tenant](prerequisites/credential)
 - [Setup the little helper flows](prerequisites/helper)
+- As of version 1.0.9: [Setup landscape stage mapping](prerequisites/stage)
 
 ## Setup of Sample Scenarios
 
