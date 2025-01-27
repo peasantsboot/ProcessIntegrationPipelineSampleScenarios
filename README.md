@@ -50,3 +50,9 @@ The following sample scenarios and variants are supported from version 1.0.8 on:
 - [Scenario 2C: Custom Extension for Interface Determination](scenarios/scenario2C)
 - [Scenario 4A: Custom Extension for Receiver Determination](scenarios/scenario4A)
 - [Scenario 7: Recipient List with non-XML payload](scenarios/scenario7)
+
+The following sample scenarios and variants are supported from version 1.0.9 on:
+
+- [Scenario 2D: Using Integrated Messaging Runtime](scenarios/scenario2D)
+- [Scenario 8: Synchronous P2P with XI Inbound](scenarios/scenario8)
+- [Scenario 9: Synchronous Content-Based-Router](scenarios/scenario9)
