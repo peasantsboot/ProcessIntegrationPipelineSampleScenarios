@@ -1,6 +1,6 @@
 # Scenario 10
 
-Scenario 10 leverages a new feature which has been supported as of integration package version 1.0.10 on, namely sender service interface with multiple operations.
+Scenario 10 leverages a new feature which has been supported as of integration package version 1.0.10 on, namely sender service interface with **multiple operations**.
 - The scenario receives order messages with either create or change operation.
 - The scenario runs on the integrated messaging runtime.
 - The scenario supports different tenant stages like DEV, QA, PRD.
@@ -15,6 +15,16 @@ The alias name is actually used across all tenant stages to identify the integra
 Ensure, that the landscape has been setup in the Partner Directory mapping the stages like **DEV**, **QA**, and **PRD** to the tenant names.
 
 ## Support for service operation
+
+We assume that there is a 1:1 relationship between the service interface operation and the message type, i.e.,
+each operation of one and the same service interface must have a unique message type. This allows us to determine the operation based on the message type.
+For this, in the scenario-specific inbound flow, we need to maintain the mapping between the operation and the root node name of the incoming XML message adhering to the naming convention as shown in figure below.
+
+<br>![](/images/22_01_Scenario10_inbound_flow.png)
+
+Depending on the incoming message, the operation is determined and stored in the header **SAP_SenderOperation** which can then be used as parameter in the XSLT to determine receiver and interface.
+
+<br>![](/images/22_02_Scenario10_xslt.png)
 
 ## Test the scenario
 To test the scenario, open your Postman client and navigate to the folder **Scenario 10 - Sender Operations --> Trigger sample messages** of the provided Postman collection **Pipeline Concept - Sample Scenarios**.
