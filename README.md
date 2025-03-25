@@ -56,3 +56,7 @@ The following sample scenarios and variants are supported from version 1.0.9 on:
 - [Scenario 2D: Using Integrated Messaging Runtime](scenarios/scenario2D)
 - [Scenario 8: Synchronous P2P with XI Inbound](scenarios/scenario8)
 - [Scenario 9: Synchronous Content-Based-Router](scenarios/scenario9)
+
+The following sample scenario is supported from version 1.0.10 on:
+
+- [Scenario 10: Supporting Service Interface Operations](scenarios/Scenario10)
