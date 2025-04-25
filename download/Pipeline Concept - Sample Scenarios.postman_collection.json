@@ -4118,6 +4118,64 @@
 							"response": []
 						},
 						{
+							"name": "Create InboundQueue",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{apiAccessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\t\"Pid\": \"{{pid}}\",\r\n\t\"Id\": \"InboundQueue\",\r\n\t\"Value\": \"PIPQ01\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{apihost}}/api/v1/StringParameters",
+									"protocol": "https",
+									"host": [
+										"{{apihost}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"StringParameters"
+									]
+								}
+							},
+							"response": []
+						},
+						{
 							"name": "Create receiverDetermination XSLT",
 							"event": [
 								{
@@ -5810,6 +5868,64 @@
 							"response": []
 						},
 						{
+							"name": "Create InboundQueue",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{apiAccessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\t\"Pid\": \"{{pid}}\",\r\n\t\"Id\": \"InboundQueue\",\r\n\t\"Value\": \"PIPQ01\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{apihost}}/api/v1/StringParameters",
+									"protocol": "https",
+									"host": [
+										"{{apihost}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"StringParameters"
+									]
+								}
+							},
+							"response": []
+						},
+						{
 							"name": "Create receiverDetermination XSLT",
 							"event": [
 								{
@@ -7036,6 +7152,64 @@
 							"response": []
 						},
 						{
+							"name": "Create InboundQueue",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{apiAccessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\t\"Pid\": \"{{pid}}\",\r\n\t\"Id\": \"InboundQueue\",\r\n\t\"Value\": \"PIPQ01\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{apihost}}/api/v1/StringParameters",
+									"protocol": "https",
+									"host": [
+										"{{apihost}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"StringParameters"
+									]
+								}
+							},
+							"response": []
+						},
+						{
 							"name": "Create receiverDetermination String",
 							"request": {
 								"auth": {
@@ -7902,6 +8076,64 @@
 								"body": {
 									"mode": "raw",
 									"raw": "{\r\n\t\"Pid\": \"{{pid}}\",\r\n\t\"Id\": \"MaxJMSRetries\",\r\n\t\"Value\": \"2\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{apihost}}/api/v1/StringParameters",
+									"protocol": "https",
+									"host": [
+										"{{apihost}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"StringParameters"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create InboundQueue",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{apiAccessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\t\"Pid\": \"{{pid}}\",\r\n\t\"Id\": \"InboundQueue\",\r\n\t\"Value\": \"PIPQ01\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -9291,7 +9523,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n  \"Agency\": \"{{sender_a_1}}\",\r\n  \"Scheme\": \"SenderInterface\",\r\n  \"Id\": \"{{interface}}\",\r\n  \"Pid\": \"{{pid}}\"\r\n}"
+									"raw": "{\r\n  \"Agency\": \"{{sender_a_1}}\",\r\n  \"Scheme\": \"{{interface}}\",\r\n  \"Id\": \"{{namespace}}\",\r\n  \"Pid\": \"{{pid}}\"\r\n}"
 								},
 								"url": {
 									"raw": "https://{{apihost}}/api/v1/AlternativePartners",
@@ -9344,7 +9576,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n  \"Agency\": \"{{sender_a_2}}\",\r\n  \"Scheme\": \"SenderInterface\",\r\n  \"Id\": \"{{interface}}\",\r\n  \"Pid\": \"{{pid}}\"\r\n}"
+									"raw": "{\r\n  \"Agency\": \"{{sender_a_2}}\",\r\n  \"Scheme\": \"{{interface}}\",\r\n  \"Id\": \"{{namespace}}\",\r\n  \"Pid\": \"{{pid}}\"\r\n}"
 								},
 								"url": {
 									"raw": "https://{{apihost}}/api/v1/AlternativePartners",
